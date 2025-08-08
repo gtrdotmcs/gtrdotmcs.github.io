@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Game Tiles Menu</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #121428, #2b2f4f);
+    margin: 0;
+    padding: 20px;
+    color: white;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  .tile-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+    max-width: 800px;
+    margin: auto;
+  }
+  .tile {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    text-align: center;
+    padding: 15px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    text-decoration: none;
+    color: #333;
+  }
+  .tile:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+  }
+  .tile img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    margin-bottom: 10px;
+  }
+</style>
+</head>
+<body>
+  <h1>Select Your Game</h1>
+  <div class="tile-container">
+    <a class="tile" href="chatgpt5/bunny_hops/bunny_hopps.html">
+      <img src="https://cdn-icons-png.flaticon.com/512/616/616408.png" alt="Bunny Game">
+      <div>Bunny Hopping</div>
+    </a>
+    <a class="tile" href="cloud_game.html">
+      <img src="https://cdn-icons-png.flaticon.com/512/414/414927.png" alt="Cloud Game">
+      <div>Cloud Jump</div>
+    </a>
+    <a class="tile" href="mario_style.html">
+      <img src="https://cdn-icons-png.flaticon.com/512/1698/1698535.png" alt="Mario Style">
+      <div>Mario Style</div>
+    </a>
+  </div>
+</body>
+</html>
