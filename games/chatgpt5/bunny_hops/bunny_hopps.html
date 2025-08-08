@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Bunny Hopping on Clouds</title>
+<style>
+    body {
+        margin: 0;
+        background: #87CEEB; /* Sky blue */
+        overflow: hidden;
+    }
+    canvas {
+        display: block;
+        background: #87CEEB;
+    }
+</style>
+</head>
+<body>
+<canvas id="gameCanvas"></canvas>
+
+<script>
+const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+const gravity = 0.5;
+const jumpStrength = -12;
+const moveSpeed = 5;
+
+let bunny = {
+    x: canvas.width / 2 - 25,
+    y: canvas.height / 2 - 25,
+    width: 50,
+    height: 50,
+    vy: 0,
+    onGround: false
+};
+
+let clouds = [
+    {
+        x: canvas.width / 2 - 50,
+        y: canvas.height / 2 + 25,
+        width: 100,
+        height: 30,
+        createdAt: Date.now(),
+        lifespan: 6000 + Math.random() * 54000
+    }
+];
+
+let keys = {};
+
+document.addEventListener("keydown", e => keys[e.code] = true);
+document.addEventListener("keyup", e => keys[e.code] = false);
+
+function spawnCloud() {
+    let cloud = {
+        x: Math.random() * (canvas.width - 100),
+        y: Math.random() * (canvas.height - 200),
+        width: 100,
+        height: 30,
+        createdAt: Date.now(),
+        lifespan: 6000 + Math.random() * 54000
+    };
+    clouds.push(cloud);
+}
+
+setInterval(spawnCloud, 2000);
+
+function update() {
+    if (keys["ArrowLeft"]) bunny.x -= moveSpeed;
+    if (keys["ArrowRight"]) bunny.x += moveSpeed;
+    
+    if (keys["Space"] && bunny.onGround) {
+        bunny.vy = jumpStrength;
+        bunny.onGround = false;
+    }
+    
+    bunny.vy += gravity;
+    bunny.y += bunny.vy;
+
+    bunny.onGround = false;
+    for (let cloud of clouds) {
+        if (
+            bunny.x < cloud.x + cloud.width &&
+            bunny.x + bunny.width > cloud.x &&
+            bunny.y + bunny.height > cloud.y &&
+            bunny.y + bunny.height < cloud.y + cloud.height + bunny.vy &&
+            bunny.vy >= 0
+        ) {
+            bunny.y = cloud.y - bunny.height;
+            bunny.vy = 0;
+            bunny.onGround = true;
+        }
+    }
+
+    clouds = clouds.filter(c => Date.now() - c.createdAt < c.lifespan);
+
+    if (bunny.x < 0) bunny.x = 0;
+    if (bunny.x + bunny.width > canvas.width) bunny.x = canvas.width - bunny.width;
+
+    if (bunny.y > canvas.height) {
+        if (confirm("Game Over! The bunny fell.\nClick OK to restart.")) {
+            document.location.reload();
+        }
+    }
+}
+
+function drawBunny() {
+    ctx.fillStyle = "#fff";
+    ctx.beginPath();
+    ctx.ellipse(bunny.x + 25, bunny.y + 25, 20, 20, 0, 0, Math.PI * 2);
+    ctx.ellipse(bunny.x + 25, bunny.y, 10, 20, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.fillStyle = "#000";
+    ctx.beginPath();
+    ctx.arc(bunny.x + 30, bunny.y - 5, 3, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.strokeStyle = "#000";
+    ctx.beginPath();
+    ctx.moveTo(bunny.x + 20, bunny.y - 15);
+    ctx.lineTo(bunny.x + 15, bunny.y - 35);
+    ctx.moveTo(bunny.x + 30, bunny.y - 15);
+    ctx.lineTo(bunny.x + 35, bunny.y - 35);
+    ctx.stroke();
+}
+
+function drawCloud(cloud) {
+    ctx.fillStyle = "#fff";
+    ctx.beginPath();
+    ctx.ellipse(cloud.x + 20, cloud.y + 15, 20, 15, 0, 0, Math.PI * 2);
+    ctx.ellipse(cloud.x + 50, cloud.y + 15, 30, 20, 0, 0, Math.PI * 2);
+    ctx.ellipse(cloud.x + 80, cloud.y + 15, 20, 15, 0, 0, Math.PI * 2);
+    ctx.fill();
+}
+
+function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawBunny();
+    for (let cloud of clouds) {
+        drawCloud(cloud);
+    }
+}
+
+function gameLoop() {
+    update();
+    draw();
+    requestAnimationFrame(gameLoop);
+}
+
+gameLoop();
+</script>
+</body>
+</html>
