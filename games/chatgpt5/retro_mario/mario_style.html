@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Retro Mario — Stage 1</title>
+<style>
+  :root{--bg:#7ec0ee}
+  html,body{height:100%;margin:0}
+  body{background:linear-gradient(#6bb7e9,#4aa0d6);font-family:monospace;display:flex;align-items:center;justify-content:center}
+  canvas{background:linear-gradient(#87cefa,#6ec0ea);box-shadow:0 12px 40px rgba(10,20,40,0.25);border-radius:8px}
+  .ui{position:fixed;left:20px;top:20px;color:white;font-weight:bold;text-shadow:0 1px 2px rgba(0,0,0,0.6)}
+  .hint{position:fixed;right:20px;top:20px;color:white;opacity:0.9}
+</style>
+</head>
+<body>
+<div class="ui">Lives: <span id="lives">3</span> &nbsp; Score: <span id="score">0</span></div>
+<div class="hint">← → = move &nbsp; Space = jump</div>
+<canvas id="game" width="960" height="540"></canvas>
+<script>
+const canvas = document.getElementById('game');
+const ctx = canvas.getContext('2d');
+
+const SCALE = 2; // retro pixel scale (visual)
+const GRAV = 0.6;
+
+// level dimensions
+const LEVEL_WIDTH = 4000;
+const LEVEL_HEIGHT = 540;
+
+let keys = {};
+let lives = 3;
+let score = 0;
+
+document.getElementById('lives').textContent = lives;
+document.getElementById('score').textContent = score;
+
+window.addEventListener('keydown', e => { if(!e.repeat) keys[e.code]=true; });
+window.addEventListener('keyup', e => { keys[e.code]=false; });
+
+// simple pixel-style player
+const player = {
+  x: 100, y: 360, w: 28, h: 40,
+  vx:0, vy:0, speed:3.2, jump:-12, onGround:false, facing:1,
+  alive:true
+};
+
+// camera
+const camera = {x:0, y:0, w: canvas.width, h: canvas.height};
+
+// platforms (x,y,w,h)
+const platforms = [
+  {x:0,y:420,w:1200,h:120},
+  {x:600,y:320,w:160,h:20},
+  {x:900,y:260,w:120,h:20},
+  {x:1150,y:340,w:220,h:20},
+  {x:1500,y:380,w:300,h:160},
+  {x:1900,y:300,w:120,h:20},
+  {x:2050,y:250,w:120,h:20},
+  {x:2250,y:200,w:150,h:20},
+  {x:2500,y:360,w:500,h:180},
+  {x:3200,y:320,w:200,h:20},
+  {x:3500,y:360,w:500,h:180}
+];
+
+// coins
+let coins = [];
+for(let i=0;i<30;i++){
+  const cx = 350 + i*120 + (Math.random()*120 - 60);
+  const cy = 200 + (Math.random()*180 - 90);
+  coins.push({x:cx,y:cy,r:8,collected:false});
+}
+
+// enemies (simple goombas)
+let enemies = [
+  {x:800,y:388,w:30,h:26,vx:1.0,dir:1,alive:true},
+  {x:1600,y:348,w:30,h:26,vx:0.8,dir:1,alive:true},
+  {x:2400,y:328,w:30,h:26,vx:0.9,dir:1,alive:true}
+];
+
+// flag (end of stage)
+const flag = {x:3800,y:300,w:20,h:120};
+
+function rectsOverlap(a,b){
+  return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;
+}
+
+function update(){
+  if(!player.alive) return;
+  // input
+  if(keys['ArrowLeft']){ player.vx = -player.speed; player.facing=-1 } else if(keys['ArrowRight']){ player.vx = player.speed; player.facing=1 } else { player.vx = 0 }
+  if(keys['Space'] || keys['KeyZ']){
+    if(player.onGround){ player.vy = player.jump; player.onGround=false }
+  }
+
+  player.vy += GRAV;
+  player.x += player.vx;
+  player.y += player.vy;
+
+  // simple level bounds
+  if(player.x < 0) player.x = 0;
+  if(player.x + player.w > LEVEL_WIDTH) player.x = LEVEL_WIDTH - player.w;
+
+  // platform collision (vertical)
+  player.onGround = false;
+  for(let p of platforms){
+    // broad-phase
+    const nextPos = {x:player.x, y:player.y, w:player.w, h:player.h};
+    const plat = {x:p.x, y:p.y, w:p.w, h:p.h};
+    if(rectsOverlap(nextPos, plat)){
+      // were we falling and came from above?
+      if(player.vy >= 0 && (player.y + player.h - player.vy) <= p.y + 8){
+        player.y = p.y - player.h;
+        player.vy = 0;
+        player.onGround = true;
+      } else {
+        // basic horizontal pushback
+        if(player.x < p.x) player.x = p.x - player.w - 0.1; else player.x = p.x + p.w + 0.1;
+        player.vx = 0;
+      }
+    }
+  }
+
+  // coins collect
+  for(let c of coins){
+    if(!c.collected){
+      const coinRect = {x:c.x-8,y:c.y-8,w:16,h:16};
+      if(rectsOverlap(player, coinRect)){
+        c.collected = true; score += 10; document.getElementById('score').textContent = score;
+      }
+    }
+  }
+
+  // enemies
+  for(let e of enemies){
+    if(!e.alive) continue;
+    e.x += e.vx * e.dir;
+    // simple patrol boundaries
+    if(e.x < e.x0 - 120 || e.x > (e.x0||e.x) + 120) e.dir *= -1;
+    // ground collision support: keep on platforms (snap)
+    // enemy vs player
+    const enemyRect = {x:e.x,y:e.y,w:e.w,h:e.h};
+    if(rectsOverlap(player, enemyRect)){
+      // stomp?
+      if(player.vy > 0 && (player.y + player.h - player.vy) <= e.y + 6){
+        // stomped
+        e.alive = false; player.vy = -8; score += 50; document.getElementById('score').textContent = score;
+      } else {
+        // hurt player
+        hurtPlayer();
+      }
+    }
+  }
+
+  // fall off
+  if(player.y > canvas.height + 200){
+    hurtPlayer();
+  }
+
+  // flag (level end)
+  if(player.x > flag.x){
+    // win
+    setTimeout(()=>alert('Stage Complete! Score: '+score),100);
+    player.alive=false;
+  }
+
+  // camera follow (center X)
+  camera.x = player.x - canvas.width/2 + player.w/2;
+  camera.x = Math.max(0, Math.min(camera.x, LEVEL_WIDTH - canvas.width));
+}
+
+function hurtPlayer(){
+  lives -= 1; document.getElementById('lives').textContent = lives;
+  if(lives <= 0){
+    setTimeout(()=>{
+      if(confirm('Game Over. Restart stage?')) location.reload();
+    },80);
+    player.alive=false;
+  } else {
+    // respawn
+    player.x = Math.max(100, player.x - 200);
+    player.y = 200; player.vx = 0; player.vy = 0;
+  }
+}
+
+function drawPixelRect(x,y,w,h, color){
+  ctx.fillStyle = color;
+  ctx.fillRect(Math.round(x - camera.x), Math.round(y - camera.y), w, h);
+}
+
+function draw(){
+  // clear
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  // sky gradient background repeated
+  // ground pattern
+  ctx.fillStyle = '#8fd19e';
+  ctx.fillRect(0,420 - camera.y, canvas.width, canvas.height);
+
+  // draw platforms
+  for(let p of platforms){
+    drawPixelRect(p.x, p.y, p.w, p.h, '#6b3e1f');
+    // top surface
+    ctx.fillStyle = '#d99b5a';
+    ctx.fillRect(Math.round(p.x - camera.x), Math.round(p.y - camera.y), p.w, 8);
+  }
+
+  // coins
+  for(let c of coins){ if(c.collected) continue;
+    const sx = Math.round(c.x - camera.x), sy = Math.round(c.y - camera.y);
+    ctx.beginPath(); ctx.fillStyle='gold'; ctx.arc(sx, sy, c.r, 0, Math.PI*2); ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,0.2)'; ctx.fillRect(sx-2, sy-10, 4, 4);
+  }
+
+  // enemies
+  for(let e of enemies){ if(!e.alive) continue;
+    ctx.fillStyle = '#a84b3a'; ctx.fillRect(Math.round(e.x - camera.x), Math.round(e.y - camera.y), e.w, e.h);
+    // eyes
+    ctx.fillStyle='#fff'; ctx.fillRect(Math.round(e.x - camera.x + 6), Math.round(e.y - camera.y + 6),4,4);
+    ctx.fillStyle='#000'; ctx.fillRect(Math.round(e.x - camera.x + 7), Math.round(e.y - camera.y + 7),2,2);
+  }
+
+  // flag
+  ctx.fillStyle='#222'; ctx.fillRect(Math.round(flag.x - camera.x), Math.round(flag.y - camera.y), 6, flag.h);
+  ctx.fillStyle='#ff2d55'; ctx.fillRect(Math.round(flag.x - camera.x)+6, Math.round(flag.y - camera.y)+10, 36, 22);
+
+  // player (pixel-y)
+  const px = Math.round(player.x - camera.x), py = Math.round(player.y - camera.y);
+  // body
+  ctx.fillStyle = '#ff6b6b'; ctx.fillRect(px, py, player.w, player.h);
+  // overalls
+  ctx.fillStyle = '#2b6cff'; ctx.fillRect(px+4, py+22, player.w-8, 14);
+  // head
+  ctx.fillStyle = '#ffdca8'; ctx.fillRect(px+6, py+2, 16, 12);
+  // eye
+  ctx.fillStyle = '#000'; ctx.fillRect(px+16, py+6, 3,3);
+
+  // simple shadow
+  ctx.fillStyle='rgba(0,0,0,0.15)'; ctx.fillRect(px+4, py+player.h, player.w-8,4);
+}
+
+let last = 0; function loop(t){
+  const dt = t - last; last = t;
+  update(dt);
+  draw();
+  requestAnimationFrame(loop);
+}
+
+// initialize enemy patrol origins
+for(let e of enemies){ e.x0 = e.x }
+
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
