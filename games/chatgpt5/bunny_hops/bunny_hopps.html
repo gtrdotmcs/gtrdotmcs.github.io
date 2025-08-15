@@ -13,14 +13,30 @@
         display: block;
         background: #87CEEB;
     }
+    #restartBtn {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        padding: 15px 30px;
+        font-size: 20px;
+        background-color: #ff4d4d;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        display: none;
+    }
 </style>
 </head>
 <body>
 <canvas id="gameCanvas"></canvas>
+<button id="restartBtn">Restart Game</button>
 
 <script>
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
+const restartBtn = document.getElementById("restartBtn");
 
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
@@ -28,6 +44,12 @@ canvas.height = window.innerHeight;
 const gravity = 0.5;
 const jumpStrength = -12;
 const moveSpeed = 5;
+
+let score = 0;
+let gameOver = false;
+
+const bunnyImg = new Image();
+bunnyImg.src = "./bunny.png";
 
 let bunny = {
     x: canvas.width / 2 - 25,
@@ -45,7 +67,8 @@ let clouds = [
         width: 100,
         height: 30,
         createdAt: Date.now(),
-        lifespan: 6000 + Math.random() * 54000
+        lifespan: 6000 + Math.random() * 54000,
+        scored: false
     }
 ];
 
@@ -61,7 +84,8 @@ function spawnCloud() {
         width: 100,
         height: 30,
         createdAt: Date.now(),
-        lifespan: 6000 + Math.random() * 54000
+        lifespan: 6000 + Math.random() * 54000,
+        scored: false
     };
     clouds.push(cloud);
 }
@@ -69,6 +93,8 @@ function spawnCloud() {
 setInterval(spawnCloud, 2000);
 
 function update() {
+    if (gameOver) return;
+
     if (keys["ArrowLeft"]) bunny.x -= moveSpeed;
     if (keys["ArrowRight"]) bunny.x += moveSpeed;
     
@@ -92,6 +118,10 @@ function update() {
             bunny.y = cloud.y - bunny.height;
             bunny.vy = 0;
             bunny.onGround = true;
+            if (!cloud.scored) {
+                score++;
+                cloud.scored = true;
+            }
         }
     }
 
@@ -101,32 +131,40 @@ function update() {
     if (bunny.x + bunny.width > canvas.width) bunny.x = canvas.width - bunny.width;
 
     if (bunny.y > canvas.height) {
-        if (confirm("Game Over! The bunny fell.\nClick OK to restart.")) {
-            document.location.reload();
-        }
+        gameOver = true;
+        restartBtn.style.display = "block";
     }
 }
 
 function drawBunny() {
-    ctx.fillStyle = "#fff";
-    ctx.beginPath();
-    ctx.ellipse(bunny.x + 25, bunny.y + 25, 20, 20, 0, 0, Math.PI * 2);
-    ctx.ellipse(bunny.x + 25, bunny.y, 10, 20, 0, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.fillStyle = "#000";
-    ctx.beginPath();
-    ctx.arc(bunny.x + 30, bunny.y - 5, 3, 0, Math.PI * 2);
-    ctx.fill();
-
-    ctx.strokeStyle = "#000";
-    ctx.beginPath();
-    ctx.moveTo(bunny.x + 20, bunny.y - 15);
-    ctx.lineTo(bunny.x + 15, bunny.y - 35);
-    ctx.moveTo(bunny.x + 30, bunny.y - 15);
-    ctx.lineTo(bunny.x + 35, bunny.y - 35);
-    ctx.stroke();
+  if (bunnyImg.complete && bunnyImg.naturalWidth > 0) {
+    ctx.drawImage(bunnyImg, bunny.x, bunny.y, bunny.width, bunny.height);
+  } else {
+    ctx.fillStyle = "pink";
+    ctx.fillRect(bunny.x, bunny.y, bunny.width, bunny.height);
+  }
 }
+
+// function drawBunny() {
+//     ctx.fillStyle = "#fff";
+//     ctx.beginPath();
+//     ctx.ellipse(bunny.x + 25, bunny.y + 25, 20, 20, 0, 0, Math.PI * 2);
+//     ctx.ellipse(bunny.x + 25, bunny.y, 10, 20, 0, 0, Math.PI * 2);
+//     ctx.fill();
+
+//     ctx.fillStyle = "#000";
+//     ctx.beginPath();
+//     ctx.arc(bunny.x + 30, bunny.y - 5, 3, 0, Math.PI * 2);
+//     ctx.fill();
+
+//     ctx.strokeStyle = "#000";
+//     ctx.beginPath();
+//     ctx.moveTo(bunny.x + 20, bunny.y - 15);
+//     ctx.lineTo(bunny.x + 15, bunny.y - 35);
+//     ctx.moveTo(bunny.x + 30, bunny.y - 15);
+//     ctx.lineTo(bunny.x + 35, bunny.y - 35);
+//     ctx.stroke();
+//}
 
 function drawCloud(cloud) {
     ctx.fillStyle = "#fff";
@@ -137,12 +175,25 @@ function drawCloud(cloud) {
     ctx.fill();
 }
 
+function drawScore() {
+    ctx.font = "24px Arial";
+    ctx.fillStyle = "#000";
+    ctx.fillText("Score: " + score, canvas.width - 150, 40);
+
+    if (gameOver) {
+        ctx.font = "40px Arial";
+        ctx.fillStyle = "#ff0000";
+        ctx.fillText("Final Score: " + score, canvas.width / 2 - 120, canvas.height / 2 - 60);
+    }
+}
+
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawBunny();
     for (let cloud of clouds) {
         drawCloud(cloud);
     }
+    drawScore();
 }
 
 function gameLoop() {
@@ -151,7 +202,15 @@ function gameLoop() {
     requestAnimationFrame(gameLoop);
 }
 
+restartBtn.addEventListener("click", () => {
+    location.reload();
+});
+
 gameLoop();
+
+bunnyImg.onload = function() {
+  gameLoop();
+};
 </script>
 </body>
 </html>
