@@ -70,6 +70,57 @@
             padding: 8px 0 40px;
         }
 
+        /* language switcher */
+        .lang-switcher {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .lang-btn {
+            padding: 6px 14px;
+            border-radius: 50px;
+            border: 1px solid var(--card-border);
+            background: var(--card-bg);
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .lang-btn.active {
+            background: var(--metro-line-bg);
+            border-color: var(--metro-line-border);
+            color: var(--metro-line-text);
+        }
+
+        /* disclaimer */
+        .disclaimer {
+            background: rgba(240, 136, 62, 0.08);
+            border: 1px solid rgba(240, 136, 62, 0.2);
+            border-radius: 10px;
+            padding: 8px 12px;
+            margin: 6px 0 10px 0;
+            text-align: center;
+            font-size: 11px;
+            color: #d29922;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+        }
+        .disclaimer .close-disclaimer {
+            background: none;
+            border: none;
+            color: inherit;
+            font-size: 16px;
+            cursor: pointer;
+            padding: 0 4px;
+        }
+
         /* line selector */
         .line-selector {
             display: flex;
@@ -207,6 +258,39 @@
             font-weight: 700;
         }
 
+        .tap-gesture-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 2px 0 8px 0;
+            opacity: 0.9;
+        }
+
+        .tap-gesture {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+            color: var(--metro-line-text);
+            font-weight: 500;
+        }
+
+        .tap-hand {
+            font-size: 20px;
+            animation: point-down 1.2s ease-in-out infinite;
+            display: inline-block;
+        }
+
+        @keyframes point-down {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(5px);
+            }
+        }
+
         .station-strip-container {
             margin: 0 0 8px 0;
         }
@@ -223,14 +307,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-        }
-
-        .tap-hint {
-            font-size: 9px;
-            color: var(--metro-line-text);
-            opacity: 0.7;
-            font-weight: 400;
-            letter-spacing: 0.3px;
         }
 
         .station-strip {
@@ -585,7 +661,39 @@
             margin-top: 1px;
         }
 
-        /* ---------- adjustment overlay ---------- */
+        .no-service {
+            text-align: center;
+            padding: 32px 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+        .no-service-icon { font-size: 48px; margin-bottom: 12px; }
+        .no-service-title { font-size: 18px; font-weight: 700; color: #f0f6fc; margin-bottom: 4px; }
+        .no-service-sub { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+        .no-service-next {
+            margin-top: 14px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent-offpeak);
+            background: var(--accent-offpeak-bg);
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 50px;
+            border: 1px solid rgba(88, 166, 255, 0.2);
+        }
+
+        .footer-info {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 11px;
+            color: var(--text-muted);
+            opacity: 0.7;
+            line-height: 1.6;
+        }
+
+        /* adjustment overlay */
         .adjust-trigger {
             position: fixed;
             bottom: 24px;
@@ -702,26 +810,42 @@
             font-size: 14px;
         }
         .close-btn:active { background: #e94560; color: white; }
+
+        @media (max-width: 380px) {
+            .departure-card { padding: 10px 8px; gap: 6px; }
+            .card-departure-time { font-size: 17px; }
+            .countdown-value { font-size: 16px; }
+        }
     </style>
 </head>
 <body>
     <div class="container" id="mainContainer">
+        <!-- Language Switcher -->
+        <div class="lang-switcher" id="langSwitcher">
+            <button class="lang-btn active" data-lang="en">🇬🇧 English</button>
+            <button class="lang-btn" data-lang="mr">🇮🇳 मराठी</button>
+            <button class="lang-btn" data-lang="hi">🇮🇳 हिन्दी</button>
+        </div>
+
+        <!-- Line Selector -->
         <div class="line-selector" id="lineSelector">
-            <button class="line-btn active" data-line="purple">🟣 Purple Line (Line 1)</button>
-            <button class="line-btn" data-line="aqua">🔵 Aqua Line (Line 2)</button>
+            <button class="line-btn active" data-line="purple" data-translate="purpleLine">🟣 Purple Line (Line 1)</button>
+            <button class="line-btn" data-line="aqua" data-translate="aquaLine">🔵 Aqua Line (Line 2)</button>
         </div>
 
+        <!-- Direction Selector -->
         <div class="direction-selector" id="directionSelector">
-            <button class="dir-btn active" data-dir="forward">🚇 Platform 1 (→)</button>
-            <button class="dir-btn" data-dir="reverse">🚇 Platform 2 (←)</button>
+            <button class="dir-btn active" data-dir="forward" data-translate="platform1">🚇 Platform 1 (→)</button>
+            <button class="dir-btn" data-dir="reverse" data-translate="platform2">🚇 Platform 2 (←)</button>
         </div>
 
+        <!-- Header -->
         <header class="header">
             <div class="station-badge" id="lineBadge">
                 <span class="station-dot"></span> <span id="lineName">Purple Line</span>
             </div>
             <h1 class="station-title" id="sourceStation">PCMC Bhavan</h1>
-            <p class="station-subtitle" id="sourceSubtitle">Source Station · Pune Metro</p>
+            <p class="station-subtitle" id="sourceSubtitle" data-translate="sourceStation">Source Station · Pune Metro</p>
             <p class="route-info" id="routeInfo"></p>
             <div class="live-clock-row">
                 <div class="live-clock">
@@ -731,18 +855,32 @@
                 </div>
                 <span class="status-pill offpeak" id="statusPill">
                     <span class="status-dot"></span>
-                    <span id="statusText">Non-Peak</span>
+                    <span id="statusText" data-translate="nonPeak">Non-Peak</span>
                 </span>
             </div>
-            <p style="font-size:11px;color:var(--text-muted);margin-top:6px;">
+            <p style="font-size:11px;color:var(--text-muted);margin-top:6px;" data-translate="frequency">
                 Frequency: every <strong id="intervalMinutes">10</strong> min
             </p>
         </header>
 
+        <!-- Disclaimer -->
+        <div class="disclaimer" id="disclaimerBox">
+            <span id="disclaimerText">⚠️ These are estimated times from the timetable, not live GPS tracking.</span>
+            <button class="close-disclaimer" onclick="document.getElementById('disclaimerBox').style.display='none'">✕</button>
+        </div>
+
+        <!-- Tap gesture -->
+        <div class="tap-gesture-container" id="tapGesture">
+            <div class="tap-gesture">
+                <span class="tap-hand">👇</span>
+                <span data-translate="tapHint">Tap a station below to see arrival times</span>
+            </div>
+        </div>
+
+        <!-- Station Strip -->
         <div class="station-strip-container">
             <div class="station-strip-label">
-                <span>📍 All Stops</span>
-                <span class="tap-hint">👆 Tap a station to see arrival times</span>
+                <span data-translate="allStops">📍 All Stops</span>
             </div>
             <div class="station-strip" id="stationStrip"></div>
         </div>
@@ -752,37 +890,193 @@
         <p class="footer-info" id="footerInfo"></p>
     </div>
 
-    <!-- floating delay adjust button -->
-    <button class="adjust-trigger" id="openAdjustBtn">⏱ Adjust Delay</button>
+    <!-- Adjustment button & overlay -->
+    <button class="adjust-trigger" id="openAdjustBtn">⏱ <span data-translate="adjustDelay">Adjust Delay</span></button>
 
-    <!-- delay overlay -->
     <div class="overlay" id="adjustOverlay">
         <div class="counter-card">
-            <h3>Schedule Adjustment</h3>
+            <h3 data-translate="scheduleAdjustment">Schedule Adjustment</h3>
             <div class="steppers-row">
                 <div class="stepper">
-                    <span class="stepper-label">Min</span>
+                    <span class="stepper-label" data-translate="min">Min</span>
                     <button class="stepper-btn" id="minUp">+</button>
                     <span class="stepper-value" id="minValue">0</span>
                     <button class="stepper-btn" id="minDown">−</button>
                 </div>
                 <span class="separator">:</span>
                 <div class="stepper">
-                    <span class="stepper-label">Sec</span>
+                    <span class="stepper-label" data-translate="sec">Sec</span>
                     <button class="stepper-btn" id="secUp">+</button>
                     <span class="stepper-value" id="secValue">00</span>
                     <button class="stepper-btn" id="secDown">−</button>
                 </div>
             </div>
             <div class="total-delay">
-                Current delay: <strong id="totalDelay">0 min 0 sec</strong>
+                <span data-translate="currentDelay">Current delay:</span> <strong id="totalDelay">0 min 0 sec</strong>
             </div>
-            <button class="close-btn" id="closeAdjustBtn">Done</button>
+            <button class="close-btn" id="closeAdjustBtn" data-translate="done">Done</button>
         </div>
     </div>
 
     <script>
         (function() {
+            // ========== TRANSLATIONS ==========
+            const translations = {
+                en: {
+                    purpleLine: '🟣 Purple Line (Line 1)',
+                    aquaLine: '🔵 Aqua Line (Line 2)',
+                    platform1: '🚇 Platform 1 (→)',
+                    platform2: '🚇 Platform 2 (←)',
+                    sourceStation: 'Source Station · Pune Metro',
+                    nonPeak: 'Non-Peak',
+                    peak: 'Peak Hours',
+                    closed: 'Closed',
+                    frequency: 'Frequency: every',
+                    min: 'min',
+                    allStops: '📍 All Stops',
+                    tapHint: 'Tap a station below to see arrival times',
+                    adjustDelay: 'Adjust Delay',
+                    scheduleAdjustment: 'Schedule Adjustment',
+                    currentDelay: 'Current delay:',
+                    done: 'Done',
+                    sec: 'Sec',
+                    disclaimer: '⚠️ These are estimated times from the timetable, not live GPS tracking.',
+                    serviceEnded: 'Service Ended',
+                    serviceEndedSub: 'Metro operates 06:00–23:00 IST.',
+                    nextMetro: 'Next metro in',
+                    at: 'at',
+                    serviceStarts: 'Starts at 06:00',
+                    firstMetro: 'First metro in',
+                    recentlyDeparted: '⏪ Recently Departed',
+                    upcomingDepartures: '⏩ Upcoming Departures',
+                    recentlyArrived: '⏪ Recently Arrived',
+                    upcomingArrivals: '⏩ Upcoming Arrivals',
+                    noMoreTrains: 'No more trains today',
+                    departs: 'Departs',
+                    departed: 'Departed',
+                    arrives: 'Arrives',
+                    arrived: 'Arrived',
+                    fullJourney: 'full journey',
+                    away: 'away',
+                    arriving: 'Arriving',
+                    justNow: 'Just now',
+                    ago: 'ago',
+                    showingDepartures: 'Showing departures from',
+                    showingArrivals: 'Showing arrivals at',
+                    minFrom: 'min from',
+                    destination: 'destination'
+                },
+                mr: {
+                    purpleLine: '🟣 जांभळी मार्ग (लाइन 1)',
+                    aquaLine: '🔵 अ‍ॅक्वा मार्ग (लाइन 2)',
+                    platform1: '🚇 फलाट 1 (→)',
+                    platform2: '🚇 फलाट 2 (←)',
+                    sourceStation: 'स्रोत स्थानक · पुणे मेट्रो',
+                    nonPeak: 'नॉन-पीक',
+                    peak: 'पीक अवर्स',
+                    closed: 'बंद',
+                    frequency: 'वारंवारता: दर',
+                    min: 'मि',
+                    allStops: '📍 सर्व थांबे',
+                    tapHint: 'आगमन वेळ पाहण्यासाठी खालील स्थानकावर टॅप करा',
+                    adjustDelay: 'विलंब समायोजित करा',
+                    scheduleAdjustment: 'वेळापत्रक समायोजन',
+                    currentDelay: 'सध्याचा विलंब:',
+                    done: 'पूर्ण',
+                    sec: 'से',
+                    disclaimer: '⚠️ हे वेळापत्रकानुसार अंदाजित वेळा आहेत, थेट GPS ट्रॅकिंग नाही.',
+                    serviceEnded: 'सेवा संपली',
+                    serviceEndedSub: 'मेट्रो 06:00–23:00 IST चालते.',
+                    nextMetro: 'पुढील मेट्रो',
+                    at: 'वाजता',
+                    serviceStarts: '06:00 वाजता सुरू होते',
+                    firstMetro: 'पहिली मेट्रो',
+                    recentlyDeparted: '⏪ नुकतेच सुटले',
+                    upcomingDepartures: '⏩ आगामी सुटका',
+                    recentlyArrived: '⏪ नुकतेच आले',
+                    upcomingArrivals: '⏩ आगामी आगमन',
+                    noMoreTrains: 'आज आणखी मेट्रो नाही',
+                    departs: 'सुटते',
+                    departed: 'सुटली',
+                    arrives: 'येते',
+                    arrived: 'आली',
+                    fullJourney: 'पूर्ण प्रवास',
+                    away: 'दूर',
+                    arriving: 'येत आहे',
+                    justNow: 'नुकतीच',
+                    ago: 'पूर्वी',
+                    showingDepartures: 'येथून सुटणाऱ्या गाड्या',
+                    showingArrivals: 'येथे येणाऱ्या गाड्या',
+                    minFrom: 'मि निघून',
+                    destination: 'शेवटचे स्थानक'
+                },
+                hi: {
+                    purpleLine: '🟣 पर्पल लाइन (लाइन 1)',
+                    aquaLine: '🔵 एक्वा लाइन (लाइन 2)',
+                    platform1: '🚇 प्लेटफॉर्म 1 (→)',
+                    platform2: '🚇 प्लेटफॉर्म 2 (←)',
+                    sourceStation: 'स्रोत स्टेशन · पुणे मेट्रो',
+                    nonPeak: 'नॉन-पीक',
+                    peak: 'पीक समय',
+                    closed: 'बंद',
+                    frequency: 'आवृत्ति: हर',
+                    min: 'मि',
+                    allStops: '📍 सभी स्टॉप',
+                    tapHint: 'आगमन समय देखने के लिए नीचे स्टेशन पर टैप करें',
+                    adjustDelay: 'देरी समायोजित करें',
+                    scheduleAdjustment: 'समय सारणी समायोजन',
+                    currentDelay: 'वर्तमान देरी:',
+                    done: 'पूर्ण',
+                    sec: 'से',
+                    disclaimer: '⚠️ ये समय सारणी से अनुमानित समय हैं, लाइव GPS ट्रैकिंग नहीं।',
+                    serviceEnded: 'सेवा समाप्त',
+                    serviceEndedSub: 'मेट्रो 06:00–23:00 IST चलती है।',
+                    nextMetro: 'अगली मेट्रो',
+                    at: 'पर',
+                    serviceStarts: '06:00 बजे शुरू',
+                    firstMetro: 'पहली मेट्रो',
+                    recentlyDeparted: '⏪ हाल ही में रवाना',
+                    upcomingDepartures: '⏩ आगामी प्रस्थान',
+                    recentlyArrived: '⏪ हाल ही में आया',
+                    upcomingArrivals: '⏩ आगामी आगमन',
+                    noMoreTrains: 'आज कोई और मेट्रो नहीं',
+                    departs: 'रवाना',
+                    departed: 'रवाना हुई',
+                    arrives: 'आती है',
+                    arrived: 'आई',
+                    fullJourney: 'पूरी यात्रा',
+                    away: 'दूर',
+                    arriving: 'आ रही है',
+                    justNow: 'अभी-अभी',
+                    ago: 'पहले',
+                    showingDepartures: 'यहाँ से प्रस्थान',
+                    showingArrivals: 'यहाँ आगमन',
+                    minFrom: 'मि से',
+                    destination: 'अंतिम स्टेशन'
+                }
+            };
+
+            let currentLang = 'en';
+
+            function translatePage(lang) {
+                currentLang = lang;
+                document.querySelectorAll('[data-translate]').forEach(el => {
+                    const key = el.getAttribute('data-translate');
+                    if (translations[lang] && translations[lang][key]) {
+                        if (key === 'frequency') {
+                            el.innerHTML = translations[lang][key] + ': every <strong id="intervalMinutes">10</strong> ' + translations[lang].min;
+                        } else {
+                            el.textContent = translations[lang][key];
+                        }
+                    }
+                });
+                document.getElementById('disclaimerText').textContent = translations[lang].disclaimer;
+                document.getElementById('lineName').textContent = (currentLine === 'purple' ? translations[lang].purpleLine.split(' ').slice(1).join(' ') : translations[lang].aquaLine.split(' ').slice(1).join(' '));
+                updateHeaderAndStrip();
+                updateSelectedIndicator();
+                render();
+            }
+
             // ========== LINE DATA ==========
             const LINES = {
                 purple: {
@@ -820,7 +1114,6 @@
                 }
             };
 
-            // build reverse for purple (symmetry)
             LINES.purple.reverse = {
                 source: LINES.purple.forward.destination,
                 destination: LINES.purple.forward.source,
@@ -832,16 +1125,14 @@
             let currentLine = 'purple';
             let isReversed = false;
             let selectedStationIndex = 0;
+            let gestureHidden = false;
+            let scheduleDelayMinutes = 0;
 
             const FIRST_DEPARTURE_MIN = 360;
             const LAST_DEPARTURE_MIN = 1380;
             const PAST_ENTRIES = 2;
             const FUTURE_ENTRIES = 5;
 
-            // delay adjustment (in minutes, will be set by overlay)
-            let scheduleDelayMinutes = 0;
-
-            // ========== SCHEDULE GENERATION ==========
             function generateForwardDepartures() {
                 const d = [];
                 for (let t = 360; t < 480; t += 10) d.push(t);
@@ -852,14 +1143,11 @@
                 return d.map(t => t + scheduleDelayMinutes);
             }
 
-            function getForwardDepartures() {
-                return generateForwardDepartures();
-            }
+            function getForwardDepartures() { return generateForwardDepartures(); }
 
             function computeReverseDepartures(lineKey) {
                 const line = LINES[lineKey];
-                const forwardOffsets = line.forward.offsets;
-                const lastOffset = forwardOffsets[forwardOffsets.length-1];
+                const lastOffset = line.forward.offsets[line.forward.offsets.length-1];
                 return getForwardDepartures().map(dep => dep + lastOffset + line.turnAroundAtDest);
             }
 
@@ -904,40 +1192,39 @@
             }
 
             function getActiveDirectionData() {
-                const line = LINES[currentLine];
-                return isReversed ? line.reverse : line.forward;
+                return isReversed ? LINES[currentLine].reverse : LINES[currentLine].forward;
             }
 
             function getOriginStation() { return getActiveDirectionData().source; }
             function getDestinationStation() { return getActiveDirectionData().destination; }
             function getStations() { return getActiveDirectionData().stations; }
             function getOffsets() { return getActiveDirectionData().offsets; }
+            const t = (key) => translations[currentLang][key] || key;
 
             function getCountdown(currentMin, targetMin, isPast) {
                 if (isPast) {
                     const diff = currentMin - targetMin;
-                    if (diff < 1) return { text:'Just now', css:'past-time', sub:'Arrived' };
-                    if (diff < 60) return { text:Math.floor(diff)+'m ago', css:'past-time', sub:'Arrived' };
+                    if (diff < 1) return { text: t('justNow'), css: 'past-time', sub: t('arrived') };
+                    if (diff < 60) return { text: Math.floor(diff) + 'm ' + t('ago'), css: 'past-time', sub: t('arrived') };
                     const h = Math.floor(diff/60), m = Math.floor(diff%60);
-                    return { text:h+'h '+m+'m ago', css:'past-time', sub:'Arrived' };
+                    return { text: h + 'h ' + m + 'm ' + t('ago'), css: 'past-time', sub: t('arrived') };
                 }
                 const diff = targetMin - currentMin;
-                if (diff <= 0.05) return { text:'Now', css:'now', sub:'Arriving' };
-                if (diff < 1) return { text:'<1 min', css:'soon', sub:'away' };
-                if (diff < 5) return { text:Math.ceil(diff)+' min', css:'soon', sub:'away' };
-                if (diff < 15) return { text:Math.ceil(diff)+' min', css:'normal', sub:'away' };
-                if (diff < 60) return { text:Math.round(diff)+' min', css:'normal', sub:'away' };
+                if (diff <= 0.05) return { text: t('justNow'), css: 'now', sub: t('arriving') };
+                if (diff < 1) return { text: '<1 ' + t('min'), css: 'soon', sub: t('away') };
+                if (diff < 5) return { text: Math.ceil(diff) + ' ' + t('min'), css: 'soon', sub: t('away') };
+                if (diff < 15) return { text: Math.ceil(diff) + ' ' + t('min'), css: 'normal', sub: t('away') };
+                if (diff < 60) return { text: Math.round(diff) + ' ' + t('min'), css: 'normal', sub: t('away') };
                 const h = Math.floor(diff/60), m = Math.round(diff%60);
-                return { text:h+'h '+(m?m+'m':''), css:'far', sub:'away' };
+                return { text: h + 'h ' + (m ? m + t('min') : ''), css: 'far', sub: t('away') };
             }
 
-            // ========== UI UPDATES ==========
             function updateHeaderAndStrip() {
                 const line = LINES[currentLine];
                 const dirData = getActiveDirectionData();
-                document.getElementById('lineName').textContent = line.name;
+                document.getElementById('lineName').textContent = currentLine === 'purple' ? 'Purple Line' : 'Aqua Line';
                 document.getElementById('sourceStation').textContent = dirData.source;
-                document.getElementById('sourceSubtitle').textContent = 'Source Station · Pune Metro';
+                document.getElementById('sourceSubtitle').textContent = t('sourceStation');
                 document.getElementById('routeInfo').innerHTML = `${dirData.source} <span class="route-arrow">→</span> ${dirData.destination} <span style="opacity:0.6;">· ~${dirData.travelTime.toFixed(1)} min</span>`;
 
                 const strip = document.getElementById('stationStrip');
@@ -958,6 +1245,10 @@
                         const idx = parseInt(this.dataset.index);
                         if (idx===selectedStationIndex) return;
                         selectedStationIndex = idx;
+                        if (!gestureHidden) {
+                            document.getElementById('tapGesture').style.display = 'none';
+                            gestureHidden = true;
+                        }
                         updateHeaderAndStrip();
                         updateSelectedIndicator();
                         render();
@@ -977,9 +1268,11 @@
                 const offset = getOffsets()[selectedStationIndex];
                 const el = document.getElementById('selectedIndicator');
                 if (selectedStationIndex===0) {
-                    el.innerHTML = `📌 Showing <strong>departures</strong> from <strong>${station}</strong>`;
+                    el.innerHTML = `📌 ${t('showingDepartures')} <strong>${station}</strong>`;
+                } else if (selectedStationIndex === stations.length-1) {
+                    el.innerHTML = `📌 ${t('showingArrivals')} <strong>${station}</strong> (${t('destination')}, ${offset.toFixed(2)} ${t('min')} ${t('minFrom')} ${origin})`;
                 } else {
-                    el.innerHTML = `📌 Showing <strong>arrivals</strong> at <strong>${station}</strong> (${offset.toFixed(2)} min from ${origin})`;
+                    el.innerHTML = `📌 ${t('showingArrivals')} <strong>${station}</strong> (${offset.toFixed(2)} ${t('min')} ${t('minFrom')} ${origin})`;
                 }
             }
 
@@ -1010,23 +1303,23 @@
 
                 let headerLabel, headerTime;
                 if (selectedStationIndex === 0) {
-                    headerLabel = isPast ? 'Departed' : 'Departs';
+                    headerLabel = isPast ? t('departed') : t('departs');
                     headerTime = departureTimeStr;
                 } else if (selectedStationIndex === stations.length-1) {
-                    headerLabel = isPast ? 'Arrived' : 'Arrives';
+                    headerLabel = isPast ? t('arrived') : t('arrives');
                     headerTime = arrivalTimeStr;
                 } else {
-                    headerLabel = isPast ? 'Arrived' : 'Arrives';
+                    headerLabel = isPast ? t('arrived') : t('arrives');
                     headerTime = arrivalTimeStr;
                 }
 
                 let secondaryInfoHTML;
                 if (selectedStationIndex === 0) {
-                    secondaryInfoHTML = `<span>Arrives ${destination}</span> <time>${formatHM(departureMin + offsets[offsets.length-1])}</time>`;
+                    secondaryInfoHTML = `<span>${t('arrives')} ${destination}</span> <time>${formatHM(departureMin + offsets[offsets.length-1])}</time>`;
                 } else if (selectedStationIndex === stations.length-1) {
-                    secondaryInfoHTML = `<span>Departs ${origin}</span> <time>${departureTimeStr}</time> <span style="font-size:10px;color:var(--text-muted);">(full journey)</span>`;
+                    secondaryInfoHTML = `<span>${t('departs')} ${origin}</span> <time>${departureTimeStr}</time> <span style="font-size:10px;color:var(--text-muted);">(${t('fullJourney')})</span>`;
                 } else {
-                    secondaryInfoHTML = `<span>Departs ${origin}</span> <time>${departureTimeStr}</time> <span style="font-size:10px;color:var(--text-muted);">(+${offset.toFixed(2)} min ride)</span>`;
+                    secondaryInfoHTML = `<span>${t('departs')} ${origin}</span> <time>${departureTimeStr}</time> <span style="font-size:10px;color:var(--text-muted);">(+${offset.toFixed(2)} ${t('min')} ride)</span>`;
                 }
 
                 return `
@@ -1061,9 +1354,16 @@
                 const statusText = document.getElementById('statusText');
                 const intervalEl = document.getElementById('intervalMinutes');
                 statusPill.classList.remove('peak', 'offpeak', 'closed');
-                if (!isOperational) { statusPill.classList.add('closed'); statusText.textContent = 'Closed'; }
-                else if (segInfo.isPeak) { statusPill.classList.add('peak'); statusText.textContent = 'Peak Hours'; }
-                else { statusPill.classList.add('offpeak'); statusText.textContent = 'Non-Peak'; }
+                if (!isOperational) {
+                    statusPill.classList.add('closed');
+                    statusText.textContent = t('closed');
+                } else if (segInfo.isPeak) {
+                    statusPill.classList.add('peak');
+                    statusText.textContent = t('peak');
+                } else {
+                    statusPill.classList.add('offpeak');
+                    statusText.textContent = t('nonPeak');
+                }
                 intervalEl.textContent = segInfo.interval;
 
                 const departureListEl = document.getElementById('departureList');
@@ -1073,11 +1373,11 @@
                     if (currentMin > LAST_DEPARTURE_MIN) {
                         const mUntil = (24*60 - currentMin) + FIRST_DEPARTURE_MIN;
                         const hU = Math.floor(mUntil/60), mU = Math.round(mUntil%60);
-                        msg = `<div class="no-service">...`;
+                        msg = `<div class="no-service"><div class="no-service-icon">🌙</div><div class="no-service-title">${t('serviceEnded')}</div><div class="no-service-sub">${t('serviceEndedSub')}</div><div class="no-service-next">${t('nextMetro')} ${hU}h ${mU}m ${t('at')} 06:00</div></div>`;
                     } else {
                         const mUntil = FIRST_DEPARTURE_MIN - currentMin;
                         const hU = Math.floor(mUntil/60), mU = Math.round(mUntil%60);
-                        msg = `<div class="no-service">...`;
+                        msg = `<div class="no-service"><div class="no-service-icon">🌅</div><div class="no-service-title">${t('serviceStarts')}</div><div class="no-service-sub">${t('firstMetro')} ${hU}h ${mU}m</div></div>`;
                     }
                     departureListEl.innerHTML = msg;
                     return;
@@ -1097,14 +1397,14 @@
                 let html = '';
                 let pastLabel, futureLabel;
                 if (selectedStationIndex === 0) {
-                    pastLabel = '⏪ Recently Departed';
-                    futureLabel = '⏩ Upcoming Departures';
+                    pastLabel = t('recentlyDeparted');
+                    futureLabel = t('upcomingDepartures');
                 } else if (selectedStationIndex === stations.length-1) {
-                    pastLabel = '⏪ Recently Arrived';
-                    futureLabel = '⏩ Upcoming Arrivals';
+                    pastLabel = t('recentlyArrived');
+                    futureLabel = t('upcomingArrivals');
                 } else {
-                    pastLabel = '⏪ Recently Arrived';
-                    futureLabel = '⏩ Upcoming Arrivals';
+                    pastLabel = t('recentlyArrived');
+                    futureLabel = t('upcomingArrivals');
                 }
 
                 if (recentPast.length > 0) {
@@ -1115,7 +1415,7 @@
 
                 html += `<div class="section-label">${futureLabel}</div><div class="departure-list">`;
                 if (upcomingFuture.length === 0) {
-                    html += '<div class="no-service" style="margin-top:0;"><div class="no-service-title" style="font-size:16px;">No more trains today</div></div>';
+                    html += `<div class="no-service" style="margin-top:0;"><div class="no-service-title" style="font-size:16px;">${t('noMoreTrains')}</div></div>`;
                 } else {
                     upcomingFuture.forEach(d => html += buildCard(d, currentMin, false));
                 }
@@ -1131,9 +1431,7 @@
                 document.getElementById('mainContainer').className = 'container ' + (LINES[lineKey].cssClass || '');
                 document.querySelectorAll('.line-btn').forEach(b => b.classList.toggle('active', b.dataset.line === lineKey));
                 document.querySelectorAll('.dir-btn').forEach(b => b.classList.toggle('active', b.dataset.dir === 'forward'));
-                updateHeaderAndStrip();
-                updateSelectedIndicator();
-                render();
+                translatePage(currentLang);
             }
 
             function switchDirection(direction) {
@@ -1147,10 +1445,8 @@
                 render();
             }
 
-            // ========== DELAY OVERLAY LOGIC ==========
-            let delayMinutes = 0;
-            let delaySeconds = 0;
-
+            // ========== DELAY OVERLAY ==========
+            let delayMinutes = 0, delaySeconds = 0;
             const minValEl = document.getElementById('minValue');
             const secValEl = document.getElementById('secValue');
             const totalEl = document.getElementById('totalDelay');
@@ -1159,7 +1455,7 @@
             function updateDelayDisplay() {
                 minValEl.textContent = delayMinutes;
                 secValEl.textContent = String(delaySeconds).padStart(2, '0');
-                totalEl.textContent = `${delayMinutes} min ${delaySeconds} sec`;
+                totalEl.textContent = `${delayMinutes} ${t('min')} ${delaySeconds} ${t('sec')}`;
             }
 
             function applyDelay() {
@@ -1167,58 +1463,41 @@
                 render();
             }
 
-            document.getElementById('minUp').addEventListener('click', () => {
-                delayMinutes++;
-                updateDelayDisplay();
-            });
-            document.getElementById('minDown').addEventListener('click', () => {
-                if (delayMinutes > 0) delayMinutes--;
-                updateDelayDisplay();
-            });
-
+            document.getElementById('minUp').addEventListener('click', () => { delayMinutes++; updateDelayDisplay(); });
+            document.getElementById('minDown').addEventListener('click', () => { if (delayMinutes > 0) delayMinutes--; updateDelayDisplay(); });
             document.getElementById('secUp').addEventListener('click', () => {
                 delaySeconds += 5;
-                if (delaySeconds >= 60) {
-                    delayMinutes += 1;
-                    delaySeconds -= 60;
-                }
+                if (delaySeconds >= 60) { delayMinutes++; delaySeconds -= 60; }
                 updateDelayDisplay();
             });
             document.getElementById('secDown').addEventListener('click', () => {
                 delaySeconds -= 5;
                 if (delaySeconds < 0) {
-                    if (delayMinutes > 0) {
-                        delayMinutes--;
-                        delaySeconds = 55;
-                    } else {
-                        delaySeconds = 0;
-                    }
+                    if (delayMinutes > 0) { delayMinutes--; delaySeconds = 55; }
+                    else { delaySeconds = 0; }
                 }
                 updateDelayDisplay();
             });
 
-            document.getElementById('openAdjustBtn').addEventListener('click', () => {
-                overlay.classList.add('open');
-            });
-            document.getElementById('closeAdjustBtn').addEventListener('click', () => {
-                overlay.classList.remove('open');
-                applyDelay();
-            });
-            overlay.addEventListener('click', (e) => {
-                if (e.target === overlay) {
-                    overlay.classList.remove('open');
-                    applyDelay();
-                }
+            document.getElementById('openAdjustBtn').addEventListener('click', () => overlay.classList.add('open'));
+            document.getElementById('closeAdjustBtn').addEventListener('click', () => { overlay.classList.remove('open'); applyDelay(); });
+            overlay.addEventListener('click', (e) => { if (e.target === overlay) { overlay.classList.remove('open'); applyDelay(); } });
+
+            // ========== LANGUAGE SWITCHER ==========
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    translatePage(btn.dataset.lang);
+                });
             });
 
-            // ========== EVENT LISTENERS ==========
+            // ========== LINE & DIRECTION BUTTONS ==========
             document.querySelectorAll('.line-btn').forEach(b => b.addEventListener('click', () => switchLine(b.dataset.line)));
             document.querySelectorAll('.dir-btn').forEach(b => b.addEventListener('click', () => switchDirection(b.dataset.dir)));
 
-            // initial render
-            updateHeaderAndStrip();
-            updateSelectedIndicator();
-            render();
+            // ========== INIT ==========
+            translatePage('en');
             setInterval(render, 1000);
         })();
     </script>
