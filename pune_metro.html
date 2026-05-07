@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pune Metro – Live Departures</title>
+    <style>
+        :root {
+            --bg: #0d1117;
+            --card-bg: #161b22;
+            --card-border: #21262d;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --text-muted: #6e7681;
+            --accent-peak: #f0883e;
+            --accent-peak-bg: rgba(240, 136, 62, 0.12);
+            --accent-offpeak: #58a6ff;
+            --accent-offpeak-bg: rgba(88, 166, 255, 0.12);
+            --accent-now: #3fb950;
+            --accent-now-bg: rgba(63, 185, 80, 0.15);
+            --accent-past: #484f58;
+            --accent-closed: #f85149;
+            --dot-live: #3fb950;
+            --metro-line: #14b8a6;
+            --metro-line-bg: rgba(20, 184, 166, 0.15);
+            --metro-line-border: rgba(20, 184, 166, 0.3);
+            --metro-line-text: #99f6e4;
+            --selected-glow: rgba(20, 184, 166, 0.6);
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.2);
+            --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.4);
+            --radius: 16px;
+            --transition: 0.2s ease;
+        }
+
+        .line-purple {
+            --metro-line: #a855f7;
+            --metro-line-bg: rgba(168, 85, 247, 0.15);
+            --metro-line-border: rgba(168, 85, 247, 0.3);
+            --metro-line-text: #d8b4fe;
+            --selected-glow: rgba(168, 85, 247, 0.6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Noto Sans', sans-serif;
+            background: var(--bg);
+            background-image:
+                radial-gradient(ellipse at 50% 0%, rgba(20, 184, 166, 0.05) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 100%, rgba(240, 136, 62, 0.04) 0%, transparent 50%);
+            color: var(--text-primary);
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 16px;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-font-smoothing: antialiased;
+            position: relative;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 520px;
+            padding: 8px 0 40px;
+        }
+
+        /* line selector */
+        .line-selector {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 50px;
+            padding: 4px;
+        }
+
+        .line-btn {
+            flex: 1;
+            padding: 10px 16px;
+            border-radius: 50px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            letter-spacing: 0.3px;
+            white-space: nowrap;
+        }
+
+        .line-btn.active {
+            background: var(--metro-line-bg);
+            color: var(--metro-line-text);
+            box-shadow: 0 0 12px var(--selected-glow);
+            border: 1px solid var(--metro-line-border);
+        }
+
+        /* direction selector */
+        .direction-selector {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 16px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 50px;
+            padding: 4px;
+        }
+
+        .dir-btn {
+            flex: 1;
+            padding: 8px 12px;
+            border-radius: 50px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
+        }
+
+        .dir-btn.active {
+            background: var(--metro-line-bg);
+            color: var(--metro-line-text);
+            border: 1px solid var(--metro-line-border);
+        }
+
+        /* header */
+        .header {
+            text-align: center;
+            margin-bottom: 16px;
+            padding: 0 4px;
+        }
+
+        .station-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--metro-line-bg);
+            border: 1px solid var(--metro-line-border);
+            border-radius: 50px;
+            padding: 6px 16px 6px 10px;
+            margin-bottom: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            color: var(--metro-line-text);
+            text-transform: uppercase;
+        }
+
+        .station-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--metro-line);
+            box-shadow: 0 0 10px var(--metro-line);
+            animation: pulse-dot 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%,
+            100% {
+                box-shadow: 0 0 8px var(--metro-line);
+            }
+            50% {
+                box-shadow: 0 0 18px var(--metro-line);
+            }
+        }
+
+        .station-title {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            color: #f0f6fc;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .station-subtitle {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        .route-info {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .route-arrow {
+            color: var(--metro-line);
+            font-weight: 700;
+        }
+
+        .station-strip-container {
+            margin: 0 0 8px 0;
+        }
+
+        .station-strip-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            font-weight: 600;
+            padding-left: 4px;
+            opacity: 0.8;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tap-hint {
+            font-size: 9px;
+            color: var(--metro-line-text);
+            opacity: 0.7;
+            font-weight: 400;
+            letter-spacing: 0.3px;
+        }
+
+        .station-strip {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            padding: 6px 2px 10px 2px;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: thin;
+            scrollbar-color: var(--card-border) transparent;
+        }
+
+        .station-strip::-webkit-scrollbar {
+            height: 4px;
+        }
+        .station-strip::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .station-strip::-webkit-scrollbar-thumb {
+            background: var(--card-border);
+            border-radius: 10px;
+        }
+
+        .station-chip {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 50px;
+            padding: 6px 12px;
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            transition: var(--transition);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .station-chip:active {
+            transform: scale(0.95);
+        }
+
+        .station-chip.source {
+            background: var(--metro-line-bg);
+            border-color: var(--metro-line-border);
+            color: var(--metro-line-text);
+            font-weight: 700;
+            box-shadow: 0 0 12px var(--selected-glow);
+        }
+
+        .station-chip.destination {
+            background: rgba(240, 136, 62, 0.12);
+            border-color: rgba(240, 136, 62, 0.35);
+            color: var(--accent-peak);
+            font-weight: 700;
+        }
+
+        .station-chip.interchange {
+            border-color: rgba(88, 166, 255, 0.4);
+            color: var(--accent-offpeak);
+            font-weight: 600;
+        }
+
+        .station-chip.selected-station {
+            border-color: var(--metro-line);
+            box-shadow: 0 0 16px var(--selected-glow);
+            background: var(--metro-line-bg);
+            color: var(--metro-line-text);
+            font-weight: 700;
+            animation: pulse-selected 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-selected {
+            0%,
+            100% {
+                box-shadow: 0 0 12px var(--selected-glow);
+            }
+            50% {
+                box-shadow: 0 0 24px var(--selected-glow);
+            }
+        }
+
+        .chip-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: currentColor;
+            opacity: 0.7;
+        }
+
+        .chip-connector {
+            color: var(--text-muted);
+            font-size: 10px;
+            margin: 0 1px;
+        }
+
+        .selected-indicator {
+            text-align: center;
+            margin: 6px 0 14px 0;
+            font-size: 11px;
+            color: var(--metro-line-text);
+            font-weight: 600;
+            opacity: 0.9;
+        }
+
+        .live-clock-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .live-clock {
+            font-size: 15px;
+            font-weight: 600;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 50px;
+            padding: 8px 16px;
+            letter-spacing: 0.5px;
+            font-variant-numeric: tabular-nums;
+            font-family: 'SF Mono', 'JetBrains Mono', 'Consolas', 'Menlo', monospace;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .live-indicator {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--dot-live);
+            box-shadow: 0 0 8px rgba(63, 185, 80, 0.7);
+            animation: pulse-dot 1.5s ease-in-out infinite;
+        }
+
+        .status-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 7px 14px;
+            border-radius: 50px;
+            letter-spacing: 0.2px;
+        }
+
+        .status-pill.peak {
+            background: var(--accent-peak-bg);
+            color: var(--accent-peak);
+            border: 1px solid rgba(240, 136, 62, 0.25);
+        }
+        .status-pill.offpeak {
+            background: var(--accent-offpeak-bg);
+            color: var(--accent-offpeak);
+            border: 1px solid rgba(88, 166, 255, 0.25);
+        }
+        .status-pill.closed {
+            background: rgba(248, 81, 73, 0.12);
+            color: var(--accent-closed);
+            border: 1px solid rgba(248, 81, 73, 0.25);
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .status-pill.peak .status-dot { background: var(--accent-peak); }
+        .status-pill.offpeak .status-dot { background: var(--accent-offpeak); }
+        .status-pill.closed .status-dot { background: var(--accent-closed); }
+
+        .section-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin: 14px 0 8px 4px;
+            opacity: 0.8;
+        }
+        .section-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--card-border);
+            opacity: 0.6;
+        }
+
+        .departure-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .departure-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--radius);
+            padding: 12px 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            cursor: default;
+        }
+
+        .departure-card.past-departure {
+            opacity: 0.55;
+            background: rgba(22, 27, 34, 0.6);
+            border-color: rgba(48, 54, 61, 0.5);
+            filter: grayscale(0.3);
+        }
+        .departure-card.past-departure:hover { opacity: 0.75; filter: grayscale(0.1); }
+        .departure-card:hover { border-color: #30363d; box-shadow: var(--shadow-lg); transform: translateY(-1px); }
+        .departure-card:active { transform: scale(0.985); transition: 0.1s ease; }
+
+        .departure-card.now-departing {
+            border-color: rgba(63, 185, 80, 0.5);
+            background: rgba(63, 185, 80, 0.05);
+            box-shadow: 0 0 20px rgba(63, 185, 80, 0.1);
+            opacity: 1;
+            filter: none;
+        }
+        .departure-card.now-departing::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--accent-now);
+            border-radius: 0 3px 3px 0;
+            animation: glow-bar 2s ease-in-out infinite;
+        }
+
+        @keyframes glow-bar {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        .card-accent-line {
+            position: absolute;
+            left: 0;
+            top: 10px;
+            bottom: 10px;
+            width: 3px;
+            border-radius: 0 3px 3px 0;
+            opacity: 0.7;
+        }
+        .card-accent-line.past { background: var(--accent-past); }
+        .card-accent-line.peak { background: var(--accent-peak); }
+        .card-accent-line.offpeak { background: var(--accent-offpeak); }
+
+        .card-time-block {
+            flex-shrink: 0;
+            text-align: center;
+            min-width: 55px;
+        }
+
+        .card-departure-time {
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            line-height: 1;
+            font-variant-numeric: tabular-nums;
+            font-family: 'SF Mono', 'JetBrains Mono', 'Consolas', 'Menlo', monospace;
+            color: #f0f6fc;
+        }
+        .past-departure .card-departure-time { color: var(--text-muted); }
+
+        .card-departure-label {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-top: 2px;
+            font-weight: 500;
+        }
+
+        .card-info { flex: 1; min-width: 0; }
+
+        .card-route {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+        .past-departure .card-route { color: var(--text-muted); }
+
+        .card-route .source-station { color: var(--metro-line-text); font-weight: 600; }
+        .card-route .dest-station { color: var(--accent-peak); font-weight: 600; }
+        .card-route .selected-station-name { color: #f0f6fc; font-weight: 700; text-decoration: underline; text-decoration-color: var(--metro-line); text-underline-offset: 2px; }
+        .past-departure .station-name { color: var(--text-muted); }
+
+        .card-arrival {
+            font-size: 11px;
+            color: var(--text-secondary);
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .card-arrival time {
+            font-weight: 600;
+            color: #c9d1d9;
+            font-variant-numeric: tabular-nums;
+            font-family: 'SF Mono', 'JetBrains Mono', 'Consolas', 'Menlo', monospace;
+        }
+
+        .card-countdown {
+            flex-shrink: 0;
+            text-align: center;
+            min-width: 55px;
+        }
+
+        .countdown-value {
+            font-size: 19px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            font-variant-numeric: tabular-nums;
+            font-family: 'SF Mono', 'JetBrains Mono', 'Consolas', 'Menlo', monospace;
+        }
+        .countdown-value.past-time { color: var(--text-muted); font-size: 13px; font-weight: 500; }
+        .countdown-value.now { color: var(--accent-now); animation: pulse-now 2s ease-in-out infinite; }
+        @keyframes pulse-now { 0%,100%{opacity:1;} 50%{opacity:0.5;} }
+        .countdown-value.soon { color: var(--accent-peak); }
+        .countdown-value.normal { color: var(--accent-offpeak); }
+        .countdown-value.far { color: var(--text-secondary); }
+
+        .countdown-label {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            color: var(--text-muted);
+            margin-top: 1px;
+        }
+
+        /* ---------- adjustment overlay ---------- */
+        .adjust-trigger {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #e94560;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(233, 69, 96, 0.4);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .adjust-trigger:active { opacity: 0.85; }
+
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.25s ease, visibility 0.25s;
+        }
+        .overlay.open {
+            visibility: visible;
+            opacity: 1;
+        }
+        .counter-card {
+            background: #16213e;
+            border-radius: 24px;
+            padding: 24px 20px;
+            width: 300px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+        .counter-card h3 {
+            margin: 0 0 20px;
+            font-size: 16px;
+            color: #ccc;
+        }
+        .steppers-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+        .stepper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+        .stepper-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #aaa;
+        }
+        .stepper-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: none;
+            font-size: 22px;
+            font-weight: bold;
+            background: #0f3460;
+            color: #e94560;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+        }
+        .stepper-btn:active { background: #e94560; color: white; }
+        .stepper-value {
+            font-size: 26px;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+            font-family: 'SF Mono', 'JetBrains Mono', monospace;
+            min-width: 50px;
+        }
+        .separator {
+            font-size: 28px;
+            color: #aaa;
+            margin-top: 20px;
+        }
+        .total-delay {
+            background: #0f3460;
+            border-radius: 12px;
+            padding: 10px;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        .total-delay strong { color: #e94560; }
+        .close-btn {
+            background: transparent;
+            border: 1px solid #e94560;
+            color: #e94560;
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            font-size: 14px;
+        }
+        .close-btn:active { background: #e94560; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container" id="mainContainer">
+        <div class="line-selector" id="lineSelector">
+            <button class="line-btn active" data-line="purple">🟣 Purple Line (Line 1)</button>
+            <button class="line-btn" data-line="aqua">🔵 Aqua Line (Line 2)</button>
+        </div>
+
+        <div class="direction-selector" id="directionSelector">
+            <button class="dir-btn active" data-dir="forward">🚇 Platform 1 (→)</button>
+            <button class="dir-btn" data-dir="reverse">🚇 Platform 2 (←)</button>
+        </div>
+
+        <header class="header">
+            <div class="station-badge" id="lineBadge">
+                <span class="station-dot"></span> <span id="lineName">Purple Line</span>
+            </div>
+            <h1 class="station-title" id="sourceStation">PCMC Bhavan</h1>
+            <p class="station-subtitle" id="sourceSubtitle">Source Station · Pune Metro</p>
+            <p class="route-info" id="routeInfo"></p>
+            <div class="live-clock-row">
+                <div class="live-clock">
+                    <span class="live-indicator"></span>
+                    <span id="liveClockTime">--:--:--</span>
+                    <span style="font-size:11px;color:var(--text-muted);">IST</span>
+                </div>
+                <span class="status-pill offpeak" id="statusPill">
+                    <span class="status-dot"></span>
+                    <span id="statusText">Non-Peak</span>
+                </span>
+            </div>
+            <p style="font-size:11px;color:var(--text-muted);margin-top:6px;">
+                Frequency: every <strong id="intervalMinutes">10</strong> min
+            </p>
+        </header>
+
+        <div class="station-strip-container">
+            <div class="station-strip-label">
+                <span>📍 All Stops</span>
+                <span class="tap-hint">👆 Tap a station to see arrival times</span>
+            </div>
+            <div class="station-strip" id="stationStrip"></div>
+        </div>
+        <div class="selected-indicator" id="selectedIndicator"></div>
+
+        <div id="departureList"></div>
+        <p class="footer-info" id="footerInfo"></p>
+    </div>
+
+    <!-- floating delay adjust button -->
+    <button class="adjust-trigger" id="openAdjustBtn">⏱ Adjust Delay</button>
+
+    <!-- delay overlay -->
+    <div class="overlay" id="adjustOverlay">
+        <div class="counter-card">
+            <h3>Schedule Adjustment</h3>
+            <div class="steppers-row">
+                <div class="stepper">
+                    <span class="stepper-label">Min</span>
+                    <button class="stepper-btn" id="minUp">+</button>
+                    <span class="stepper-value" id="minValue">0</span>
+                    <button class="stepper-btn" id="minDown">−</button>
+                </div>
+                <span class="separator">:</span>
+                <div class="stepper">
+                    <span class="stepper-label">Sec</span>
+                    <button class="stepper-btn" id="secUp">+</button>
+                    <span class="stepper-value" id="secValue">00</span>
+                    <button class="stepper-btn" id="secDown">−</button>
+                </div>
+            </div>
+            <div class="total-delay">
+                Current delay: <strong id="totalDelay">0 min 0 sec</strong>
+            </div>
+            <button class="close-btn" id="closeAdjustBtn">Done</button>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // ========== LINE DATA ==========
+            const LINES = {
+                purple: {
+                    name: 'Purple Line',
+                    forward: {
+                        source: 'PCMC Bhavan',
+                        destination: 'Swargate',
+                        stations: ['PCMC Bhavan','Sant Tukaram Nagar','Bhosari (Nashik Phata)','Kasarwadi','Phugewadi','Dapodi','Bopodi','Khadki','Range Hill','Shivaji Nagar','Civil Court','Budhwar Peth','Mandai','Swargate'],
+                        offsets: [0.0, 2.62, 5.23, 7.85, 10.46, 13.08, 15.69, 18.31, 20.92, 23.54, 26.15, 28.77, 31.38, 34.0],
+                        travelTime: 34.0
+                    },
+                    turnAroundAtDest: 4.0,
+                    turnAroundAtOrigin: 4.0,
+                    cssClass: 'line-purple'
+                },
+                aqua: {
+                    name: 'Aqua Line',
+                    forward: {
+                        source: 'Vanaz',
+                        destination: 'Ramwadi',
+                        stations: ['Vanaz','Anand Nagar','Ideal Colony','Nal Stop','Garware College','Deccan Gymkhana','Chhatrapati Sambhaji Udyan','PMC Bhavan','Civil Court','Mangalwar Peth','Pune Railway Station','Ruby Hall Clinic','Bund Garden','Yerawada','Kalyani Nagar','Ramwadi'],
+                        offsets: [0.00, 2.57, 4.57, 6.37, 9.65, 11.80, 13.37, 15.52, 17.82, 20.57, 22.65, 24.60, 26.98, 29.18, 34.32, 37.98],
+                        travelTime: 37.98
+                    },
+                    reverse: {
+                        source: 'Ramwadi',
+                        destination: 'Vanaz',
+                        stations: ['Ramwadi','Kalyani Nagar','Yerawada','Bund Garden','Ruby Hall Clinic','Pune Railway Station','Mangalwar Peth','Civil Court','PMC Bhavan','Chhatrapati Sambhaji Udyan','Deccan Gymkhana','Garware College','Nal Stop','Ideal Colony','Anand Nagar','Vanaz'],
+                        offsets: [0.00, 2.68, 7.60, 9.93, 12.18, 13.93, 16.23, 18.82, 21.27, 23.38, 25.10, 27.28, 29.55, 32.32, 34.48, 37.37],
+                        travelTime: 37.37
+                    },
+                    turnAroundAtDest: 4.67,
+                    turnAroundAtOrigin: 4.75,
+                    cssClass: ''
+                }
+            };
+
+            // build reverse for purple (symmetry)
+            LINES.purple.reverse = {
+                source: LINES.purple.forward.destination,
+                destination: LINES.purple.forward.source,
+                stations: [...LINES.purple.forward.stations].reverse(),
+                offsets: [...LINES.purple.forward.offsets].reverse(),
+                travelTime: LINES.purple.forward.travelTime
+            };
+
+            let currentLine = 'purple';
+            let isReversed = false;
+            let selectedStationIndex = 0;
+
+            const FIRST_DEPARTURE_MIN = 360;
+            const LAST_DEPARTURE_MIN = 1380;
+            const PAST_ENTRIES = 2;
+            const FUTURE_ENTRIES = 5;
+
+            // delay adjustment (in minutes, will be set by overlay)
+            let scheduleDelayMinutes = 0;
+
+            // ========== SCHEDULE GENERATION ==========
+            function generateForwardDepartures() {
+                const d = [];
+                for (let t = 360; t < 480; t += 10) d.push(t);
+                for (let t = 480; t <= 660; t += 6) d.push(t);
+                for (let t = 670; t < 960; t += 10) d.push(t);
+                for (let t = 960; t <= 1200; t += 6) d.push(t);
+                for (let t = 1210; t <= 1380; t += 10) d.push(t);
+                return d.map(t => t + scheduleDelayMinutes);
+            }
+
+            function getForwardDepartures() {
+                return generateForwardDepartures();
+            }
+
+            function computeReverseDepartures(lineKey) {
+                const line = LINES[lineKey];
+                const forwardOffsets = line.forward.offsets;
+                const lastOffset = forwardOffsets[forwardOffsets.length-1];
+                return getForwardDepartures().map(dep => dep + lastOffset + line.turnAroundAtDest);
+            }
+
+            function getEffectiveDepartures() {
+                return isReversed ? computeReverseDepartures(currentLine) : getForwardDepartures();
+            }
+
+            // ========== HELPERS ==========
+            function getCurrentIST() {
+                const now = new Date();
+                const opts = { timeZone: 'Asia/Kolkata', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
+                const parts = new Intl.DateTimeFormat('en-US', opts).formatToParts(now);
+                const gp = t => parts.find(p => p.type === t)?.value || '0';
+                return {
+                    hours: parseInt(gp('hour')),
+                    minutes: parseInt(gp('minute')),
+                    seconds: parseInt(gp('second')),
+                    totalMinutes: parseInt(gp('hour')) * 60 + parseInt(gp('minute')) + parseInt(gp('second')) / 60,
+                };
+            }
+
+            function formatHM(tm) {
+                const c = ((tm % 1440) + 1440) % 1440;
+                return String(Math.floor(c / 60)).padStart(2,'0') + ':' + String(Math.floor(c % 60)).padStart(2,'0');
+            }
+            function formatHMS(tm) {
+                const c = ((tm % 1440) + 1440) % 1440;
+                const h = Math.floor(c/60), m = Math.floor(c%60), s = Math.floor((c%1)*60);
+                return String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+            }
+
+            function getSegmentInfo(tm) {
+                const segs = [
+                    { start:360, end:480, interval:10, isPeak:false },
+                    { start:480, end:660, interval:6, isPeak:true },
+                    { start:660, end:960, interval:10, isPeak:false },
+                    { start:960, end:1200, interval:6, isPeak:true },
+                    { start:1200, end:1380, interval:10, isPeak:false }
+                ];
+                for (let s of segs) if (tm>=s.start && tm<s.end) return { interval:s.interval, isPeak:s.isPeak, isOperational:true };
+                return { interval:10, isPeak:false, isOperational:false };
+            }
+
+            function getActiveDirectionData() {
+                const line = LINES[currentLine];
+                return isReversed ? line.reverse : line.forward;
+            }
+
+            function getOriginStation() { return getActiveDirectionData().source; }
+            function getDestinationStation() { return getActiveDirectionData().destination; }
+            function getStations() { return getActiveDirectionData().stations; }
+            function getOffsets() { return getActiveDirectionData().offsets; }
+
+            function getCountdown(currentMin, targetMin, isPast) {
+                if (isPast) {
+                    const diff = currentMin - targetMin;
+                    if (diff < 1) return { text:'Just now', css:'past-time', sub:'Arrived' };
+                    if (diff < 60) return { text:Math.floor(diff)+'m ago', css:'past-time', sub:'Arrived' };
+                    const h = Math.floor(diff/60), m = Math.floor(diff%60);
+                    return { text:h+'h '+m+'m ago', css:'past-time', sub:'Arrived' };
+                }
+                const diff = targetMin - currentMin;
+                if (diff <= 0.05) return { text:'Now', css:'now', sub:'Arriving' };
+                if (diff < 1) return { text:'<1 min', css:'soon', sub:'away' };
+                if (diff < 5) return { text:Math.ceil(diff)+' min', css:'soon', sub:'away' };
+                if (diff < 15) return { text:Math.ceil(diff)+' min', css:'normal', sub:'away' };
+                if (diff < 60) return { text:Math.round(diff)+' min', css:'normal', sub:'away' };
+                const h = Math.floor(diff/60), m = Math.round(diff%60);
+                return { text:h+'h '+(m?m+'m':''), css:'far', sub:'away' };
+            }
+
+            // ========== UI UPDATES ==========
+            function updateHeaderAndStrip() {
+                const line = LINES[currentLine];
+                const dirData = getActiveDirectionData();
+                document.getElementById('lineName').textContent = line.name;
+                document.getElementById('sourceStation').textContent = dirData.source;
+                document.getElementById('sourceSubtitle').textContent = 'Source Station · Pune Metro';
+                document.getElementById('routeInfo').innerHTML = `${dirData.source} <span class="route-arrow">→</span> ${dirData.destination} <span style="opacity:0.6;">· ~${dirData.travelTime.toFixed(1)} min</span>`;
+
+                const strip = document.getElementById('stationStrip');
+                const stations = dirData.stations;
+                let html = '';
+                stations.forEach((s, i) => {
+                    let cls = '';
+                    if (i===0) cls += ' source';
+                    else if (i===stations.length-1) cls += ' destination';
+                    else if (s==='Civil Court') cls += ' interchange';
+                    if (i===selectedStationIndex) cls += ' selected-station';
+                    html += `<span class="station-chip${cls}" data-index="${i}">${s}${s==='Civil Court'?' 🔄':''}</span>`;
+                    if (i<stations.length-1) html += '<span class="chip-connector">→</span>';
+                });
+                strip.innerHTML = html;
+                strip.querySelectorAll('.station-chip').forEach(chip => {
+                    chip.addEventListener('click', function() {
+                        const idx = parseInt(this.dataset.index);
+                        if (idx===selectedStationIndex) return;
+                        selectedStationIndex = idx;
+                        updateHeaderAndStrip();
+                        updateSelectedIndicator();
+                        render();
+                        this.scrollIntoView({ behavior:'smooth', block:'nearest', inline:'center' });
+                    });
+                });
+
+                document.getElementById('footerInfo').innerHTML = `
+                    <strong>${line.name}:</strong> ${stations.join(' → ')}<br>
+                    <span style="opacity:0.7;">Service: 6:00–23:00 IST · ${stations.length} stops · ${dirData.travelTime.toFixed(1)} min</span>`;
+            }
+
+            function updateSelectedIndicator() {
+                const stations = getStations();
+                const station = stations[selectedStationIndex];
+                const origin = getOriginStation();
+                const offset = getOffsets()[selectedStationIndex];
+                const el = document.getElementById('selectedIndicator');
+                if (selectedStationIndex===0) {
+                    el.innerHTML = `📌 Showing <strong>departures</strong> from <strong>${station}</strong>`;
+                } else {
+                    el.innerHTML = `📌 Showing <strong>arrivals</strong> at <strong>${station}</strong> (${offset.toFixed(2)} min from ${origin})`;
+                }
+            }
+
+            function buildCard(departureMin, currentMin, isPast) {
+                const offsets = getOffsets();
+                const stations = getStations();
+                const origin = getOriginStation();
+                const destination = getDestinationStation();
+                const offset = offsets[selectedStationIndex];
+                const arrivalAtStation = departureMin + offset;
+                const departureTimeStr = formatHM(departureMin);
+                const arrivalTimeStr = formatHM(arrivalAtStation);
+                const countdown = getCountdown(currentMin, arrivalAtStation, isPast);
+                const segInfo = getSegmentInfo(departureMin);
+                const isNow = !isPast && countdown.css === 'now';
+                const accentClass = isPast ? 'past' : (segInfo.isPeak ? 'peak' : 'offpeak');
+                const pastClass = isPast ? ' past-departure' : '';
+                const nowClass = isNow ? ' now-departing' : '';
+                const stationName = stations[selectedStationIndex];
+                const isFirstOrLast = selectedStationIndex===0 || selectedStationIndex===stations.length-1;
+
+                let routeHTML;
+                if (isFirstOrLast) {
+                    routeHTML = `<span class="source-station">${origin}</span> <span style="color:var(--metro-line);">→</span> <span class="dest-station">${destination}</span>`;
+                } else {
+                    routeHTML = `<span class="source-station">${origin}</span> <span style="color:var(--metro-line);">→</span> <span class="selected-station-name">${stationName}</span> <span style="color:var(--metro-line);">→</span> <span class="dest-station">${destination}</span>`;
+                }
+
+                let headerLabel, headerTime;
+                if (selectedStationIndex === 0) {
+                    headerLabel = isPast ? 'Departed' : 'Departs';
+                    headerTime = departureTimeStr;
+                } else if (selectedStationIndex === stations.length-1) {
+                    headerLabel = isPast ? 'Arrived' : 'Arrives';
+                    headerTime = arrivalTimeStr;
+                } else {
+                    headerLabel = isPast ? 'Arrived' : 'Arrives';
+                    headerTime = arrivalTimeStr;
+                }
+
+                let secondaryInfoHTML;
+                if (selectedStationIndex === 0) {
+                    secondaryInfoHTML = `<span>Arrives ${destination}</span> <time>${formatHM(departureMin + offsets[offsets.length-1])}</time>`;
+                } else if (selectedStationIndex === stations.length-1) {
+                    secondaryInfoHTML = `<span>Departs ${origin}</span> <time>${departureTimeStr}</time> <span style="font-size:10px;color:var(--text-muted);">(full journey)</span>`;
+                } else {
+                    secondaryInfoHTML = `<span>Departs ${origin}</span> <time>${departureTimeStr}</time> <span style="font-size:10px;color:var(--text-muted);">(+${offset.toFixed(2)} min ride)</span>`;
+                }
+
+                return `
+                    <div class="departure-card${pastClass}${nowClass}">
+                        <span class="card-accent-line ${accentClass}"></span>
+                        <div class="card-time-block">
+                            <div class="card-departure-time">${headerTime}</div>
+                            <div class="card-departure-label">${headerLabel}</div>
+                        </div>
+                        <div class="card-info">
+                            <div class="card-route">${routeHTML}</div>
+                            <div class="card-arrival">${secondaryInfoHTML}</div>
+                        </div>
+                        <div class="card-countdown">
+                            <div class="countdown-value ${countdown.css}">${countdown.text}</div>
+                            <div class="countdown-label">${countdown.sub}</div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            function render() {
+                const ist = getCurrentIST();
+                const currentMin = ist.totalMinutes;
+                const stations = getStations();
+
+                document.getElementById('liveClockTime').textContent = formatHMS(currentMin);
+
+                const segInfo = getSegmentInfo(currentMin);
+                const isOperational = currentMin >= FIRST_DEPARTURE_MIN && currentMin <= LAST_DEPARTURE_MIN;
+                const statusPill = document.getElementById('statusPill');
+                const statusText = document.getElementById('statusText');
+                const intervalEl = document.getElementById('intervalMinutes');
+                statusPill.classList.remove('peak', 'offpeak', 'closed');
+                if (!isOperational) { statusPill.classList.add('closed'); statusText.textContent = 'Closed'; }
+                else if (segInfo.isPeak) { statusPill.classList.add('peak'); statusText.textContent = 'Peak Hours'; }
+                else { statusPill.classList.add('offpeak'); statusText.textContent = 'Non-Peak'; }
+                intervalEl.textContent = segInfo.interval;
+
+                const departureListEl = document.getElementById('departureList');
+
+                if (currentMin > LAST_DEPARTURE_MIN || currentMin < FIRST_DEPARTURE_MIN) {
+                    let msg = '';
+                    if (currentMin > LAST_DEPARTURE_MIN) {
+                        const mUntil = (24*60 - currentMin) + FIRST_DEPARTURE_MIN;
+                        const hU = Math.floor(mUntil/60), mU = Math.round(mUntil%60);
+                        msg = `<div class="no-service">...`;
+                    } else {
+                        const mUntil = FIRST_DEPARTURE_MIN - currentMin;
+                        const hU = Math.floor(mUntil/60), mU = Math.round(mUntil%60);
+                        msg = `<div class="no-service">...`;
+                    }
+                    departureListEl.innerHTML = msg;
+                    return;
+                }
+
+                const departures = getEffectiveDepartures();
+                const offset = getOffsets()[selectedStationIndex];
+                const past = [], future = [];
+                for (const dep of departures) {
+                    const arrivalAtStation = dep + offset;
+                    if (arrivalAtStation <= currentMin) past.push(dep);
+                    else future.push(dep);
+                }
+                const recentPast = past.slice(-PAST_ENTRIES);
+                const upcomingFuture = future.slice(0, FUTURE_ENTRIES);
+
+                let html = '';
+                let pastLabel, futureLabel;
+                if (selectedStationIndex === 0) {
+                    pastLabel = '⏪ Recently Departed';
+                    futureLabel = '⏩ Upcoming Departures';
+                } else if (selectedStationIndex === stations.length-1) {
+                    pastLabel = '⏪ Recently Arrived';
+                    futureLabel = '⏩ Upcoming Arrivals';
+                } else {
+                    pastLabel = '⏪ Recently Arrived';
+                    futureLabel = '⏩ Upcoming Arrivals';
+                }
+
+                if (recentPast.length > 0) {
+                    html += `<div class="section-label">${pastLabel}</div><div class="departure-list">`;
+                    recentPast.forEach(d => html += buildCard(d, currentMin, true));
+                    html += '</div>';
+                }
+
+                html += `<div class="section-label">${futureLabel}</div><div class="departure-list">`;
+                if (upcomingFuture.length === 0) {
+                    html += '<div class="no-service" style="margin-top:0;"><div class="no-service-title" style="font-size:16px;">No more trains today</div></div>';
+                } else {
+                    upcomingFuture.forEach(d => html += buildCard(d, currentMin, false));
+                }
+                html += '</div>';
+                departureListEl.innerHTML = html;
+            }
+
+            function switchLine(lineKey) {
+                if (currentLine === lineKey) return;
+                currentLine = lineKey;
+                isReversed = false;
+                selectedStationIndex = 0;
+                document.getElementById('mainContainer').className = 'container ' + (LINES[lineKey].cssClass || '');
+                document.querySelectorAll('.line-btn').forEach(b => b.classList.toggle('active', b.dataset.line === lineKey));
+                document.querySelectorAll('.dir-btn').forEach(b => b.classList.toggle('active', b.dataset.dir === 'forward'));
+                updateHeaderAndStrip();
+                updateSelectedIndicator();
+                render();
+            }
+
+            function switchDirection(direction) {
+                const newReversed = (direction === 'reverse');
+                if (isReversed === newReversed) return;
+                isReversed = newReversed;
+                selectedStationIndex = 0;
+                document.querySelectorAll('.dir-btn').forEach(b => b.classList.toggle('active', b.dataset.dir === direction));
+                updateHeaderAndStrip();
+                updateSelectedIndicator();
+                render();
+            }
+
+            // ========== DELAY OVERLAY LOGIC ==========
+            let delayMinutes = 0;
+            let delaySeconds = 0;
+
+            const minValEl = document.getElementById('minValue');
+            const secValEl = document.getElementById('secValue');
+            const totalEl = document.getElementById('totalDelay');
+            const overlay = document.getElementById('adjustOverlay');
+
+            function updateDelayDisplay() {
+                minValEl.textContent = delayMinutes;
+                secValEl.textContent = String(delaySeconds).padStart(2, '0');
+                totalEl.textContent = `${delayMinutes} min ${delaySeconds} sec`;
+            }
+
+            function applyDelay() {
+                scheduleDelayMinutes = delayMinutes + delaySeconds / 60;
+                render();
+            }
+
+            document.getElementById('minUp').addEventListener('click', () => {
+                delayMinutes++;
+                updateDelayDisplay();
+            });
+            document.getElementById('minDown').addEventListener('click', () => {
+                if (delayMinutes > 0) delayMinutes--;
+                updateDelayDisplay();
+            });
+
+            document.getElementById('secUp').addEventListener('click', () => {
+                delaySeconds += 5;
+                if (delaySeconds >= 60) {
+                    delayMinutes += 1;
+                    delaySeconds -= 60;
+                }
+                updateDelayDisplay();
+            });
+            document.getElementById('secDown').addEventListener('click', () => {
+                delaySeconds -= 5;
+                if (delaySeconds < 0) {
+                    if (delayMinutes > 0) {
+                        delayMinutes--;
+                        delaySeconds = 55;
+                    } else {
+                        delaySeconds = 0;
+                    }
+                }
+                updateDelayDisplay();
+            });
+
+            document.getElementById('openAdjustBtn').addEventListener('click', () => {
+                overlay.classList.add('open');
+            });
+            document.getElementById('closeAdjustBtn').addEventListener('click', () => {
+                overlay.classList.remove('open');
+                applyDelay();
+            });
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    overlay.classList.remove('open');
+                    applyDelay();
+                }
+            });
+
+            // ========== EVENT LISTENERS ==========
+            document.querySelectorAll('.line-btn').forEach(b => b.addEventListener('click', () => switchLine(b.dataset.line)));
+            document.querySelectorAll('.dir-btn').forEach(b => b.addEventListener('click', () => switchDirection(b.dataset.dir)));
+
+            // initial render
+            updateHeaderAndStrip();
+            updateSelectedIndicator();
+            render();
+            setInterval(render, 1000);
+        })();
+    </script>
+</body>
+</html>
