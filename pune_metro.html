@@ -13,809 +13,268 @@
             --text-secondary: #8b949e;
             --text-muted: #6e7681;
             --accent-peak: #f0883e;
-            --accent-peak-bg: rgba(240, 136, 62, 0.12);
+            --accent-peak-bg: rgba(240,136,62,0.12);
             --accent-offpeak: #58a6ff;
-            --accent-offpeak-bg: rgba(88, 166, 255, 0.12);
+            --accent-offpeak-bg: rgba(88,166,255,0.12);
             --accent-now: #3fb950;
-            --accent-now-bg: rgba(63, 185, 80, 0.15);
+            --accent-now-bg: rgba(63,185,80,0.15);
             --accent-past: #484f58;
             --accent-closed: #f85149;
             --dot-live: #3fb950;
             --metro-line: #14b8a6;
-            --metro-line-bg: rgba(20, 184, 166, 0.15);
-            --metro-line-border: rgba(20, 184, 166, 0.3);
+            --metro-line-bg: rgba(20,184,166,0.15);
+            --metro-line-border: rgba(20,184,166,0.3);
             --metro-line-text: #99f6e4;
-            --selected-glow: rgba(20, 184, 166, 0.6);
-            --shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 4px 12px rgba(0, 0, 0, 0.2);
-            --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.4);
+            --selected-glow: rgba(20,184,166,0.6);
+            --shadow: 0 1px 3px rgba(0,0,0,0.3), 0 4px 12px rgba(0,0,0,0.2);
+            --shadow-lg: 0 8px 30px rgba(0,0,0,0.4);
             --radius: 16px;
             --transition: 0.2s ease;
         }
 
         .line-purple {
             --metro-line: #a855f7;
-            --metro-line-bg: rgba(168, 85, 247, 0.15);
-            --metro-line-border: rgba(168, 85, 247, 0.3);
+            --metro-line-bg: rgba(168,85,247,0.15);
+            --metro-line-border: rgba(168,85,247,0.3);
             --metro-line-text: #d8b4fe;
-            --selected-glow: rgba(168, 85, 247, 0.6);
+            --selected-glow: rgba(168,85,247,0.6);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin:0; padding:0; box-sizing:border-box; }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Noto Sans', sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
             background: var(--bg);
-            background-image:
-                radial-gradient(ellipse at 50% 0%, rgba(20, 184, 166, 0.05) 0%, transparent 60%),
-                radial-gradient(ellipse at 80% 100%, rgba(240, 136, 62, 0.04) 0%, transparent 50%);
+            background-image: radial-gradient(ellipse at 50% 0%, rgba(20,184,166,0.05) 0%, transparent 60%),
+                            radial-gradient(ellipse at 80% 100%, rgba(240,136,62,0.04) 0%, transparent 50%);
             color: var(--text-primary);
-            min-height: 100vh;
-            min-height: 100dvh;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
+            min-height: 100vh; min-height: 100dvh;
+            display: flex; justify-content: center; align-items: flex-start;
             padding: 16px;
             -webkit-tap-highlight-color: transparent;
             -webkit-font-smoothing: antialiased;
             position: relative;
         }
 
-        .container {
-            width: 100%;
-            max-width: 520px;
-            padding: 8px 0 40px;
-        }
+        .container { width:100%; max-width:520px; padding:8px 0 100px; }
 
-        /* language switcher */
-        .lang-switcher {
-            display: flex;
-            justify-content: center;
-            gap: 6px;
-            margin-bottom: 12px;
-            flex-wrap: wrap;
-        }
-
+        /* lang switcher */
+        .lang-switcher { display:flex; justify-content:center; gap:6px; margin-bottom:12px; flex-wrap:wrap; }
         .lang-btn {
-            padding: 6px 14px;
-            border-radius: 50px;
-            border: 1px solid var(--card-border);
-            background: var(--card-bg);
-            color: var(--text-secondary);
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
+            padding:6px 14px; border-radius:50px; border:1px solid var(--card-border);
+            background:var(--card-bg); color:var(--text-secondary); font-size:12px;
+            font-weight:600; cursor:pointer; transition:var(--transition);
         }
-
         .lang-btn.active {
-            background: var(--metro-line-bg);
-            border-color: var(--metro-line-border);
-            color: var(--metro-line-text);
+            background:var(--metro-line-bg); border-color:var(--metro-line-border);
+            color:var(--metro-line-text);
         }
 
         /* disclaimer */
         .disclaimer {
-            background: rgba(240, 136, 62, 0.08);
-            border: 1px solid rgba(240, 136, 62, 0.2);
-            border-radius: 10px;
-            padding: 8px 12px;
-            margin: 6px 0 10px 0;
-            text-align: center;
-            font-size: 11px;
-            color: #d29922;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
+            background:rgba(240,136,62,0.08); border:1px solid rgba(240,136,62,0.2);
+            border-radius:10px; padding:8px 12px; margin:6px 0 10px 0; text-align:center;
+            font-size:11px; color:#d29922; display:flex; align-items:center;
+            justify-content:space-between; gap:8px;
         }
-        .disclaimer .close-disclaimer {
-            background: none;
-            border: none;
-            color: inherit;
-            font-size: 16px;
-            cursor: pointer;
-            padding: 0 4px;
-        }
+        .disclaimer .close-disclaimer { background:none; border:none; color:inherit; font-size:16px; cursor:pointer; padding:0 4px; }
 
-        /* line selector */
-        .line-selector {
-            display: flex;
-            justify-content: center;
-            gap: 12px;
-            margin-bottom: 12px;
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 50px;
-            padding: 4px;
+        /* selectors */
+        .line-selector, .direction-selector {
+            display:flex; justify-content:center; gap:12px; margin-bottom:12px;
+            background:var(--card-bg); border:1px solid var(--card-border); border-radius:50px; padding:4px;
         }
-
-        .line-btn {
-            flex: 1;
-            padding: 10px 16px;
-            border-radius: 50px;
-            border: none;
-            background: transparent;
-            color: var(--text-secondary);
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            transition: var(--transition);
-            letter-spacing: 0.3px;
-            white-space: nowrap;
+        .line-btn, .dir-btn {
+            flex:1; padding:10px 16px; border-radius:50px; border:none; background:transparent;
+            color:var(--text-secondary); font-weight:600; font-size:14px; cursor:pointer;
+            transition:var(--transition); letter-spacing:0.3px; white-space:nowrap;
         }
-
-        .line-btn.active {
-            background: var(--metro-line-bg);
-            color: var(--metro-line-text);
-            box-shadow: 0 0 12px var(--selected-glow);
-            border: 1px solid var(--metro-line-border);
+        .line-btn.active, .dir-btn.active {
+            background:var(--metro-line-bg); color:var(--metro-line-text);
+            box-shadow:0 0 12px var(--selected-glow); border:1px solid var(--metro-line-border);
         }
-
-        /* direction selector */
-        .direction-selector {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 16px;
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 50px;
-            padding: 4px;
-        }
-
-        .dir-btn {
-            flex: 1;
-            padding: 8px 12px;
-            border-radius: 50px;
-            border: none;
-            background: transparent;
-            color: var(--text-secondary);
-            font-weight: 600;
-            font-size: 12px;
-            cursor: pointer;
-            transition: var(--transition);
-            white-space: nowrap;
-        }
-
-        .dir-btn.active {
-            background: var(--metro-line-bg);
-            color: var(--metro-line-text);
-            border: 1px solid var(--metro-line-border);
-        }
+        .dir-btn { font-size:12px; padding:8px 12px; }
 
         /* header */
-        .header {
-            text-align: center;
-            margin-bottom: 16px;
-            padding: 0 4px;
-        }
-
+        .header { text-align:center; margin-bottom:16px; padding:0 4px; }
         .station-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--metro-line-bg);
-            border: 1px solid var(--metro-line-border);
-            border-radius: 50px;
-            padding: 6px 16px 6px 10px;
-            margin-bottom: 10px;
-            font-size: 13px;
-            font-weight: 600;
-            letter-spacing: 0.3px;
-            color: var(--metro-line-text);
-            text-transform: uppercase;
+            display:inline-flex; align-items:center; gap:8px; background:var(--metro-line-bg);
+            border:1px solid var(--metro-line-border); border-radius:50px; padding:6px 16px 6px 10px;
+            margin-bottom:10px; font-size:13px; font-weight:600; letter-spacing:0.3px;
+            color:var(--metro-line-text); text-transform:uppercase;
         }
-
         .station-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--metro-line);
-            box-shadow: 0 0 10px var(--metro-line);
-            animation: pulse-dot 2s ease-in-out infinite;
+            width:10px; height:10px; border-radius:50%; background:var(--metro-line);
+            box-shadow:0 0 10px var(--metro-line); animation:pulse-dot 2s ease-in-out infinite;
         }
-
         @keyframes pulse-dot {
-            0%,
-            100% {
-                box-shadow: 0 0 8px var(--metro-line);
-            }
-            50% {
-                box-shadow: 0 0 18px var(--metro-line);
-            }
+            0%,100%{ box-shadow:0 0 8px var(--metro-line); }
+            50%{ box-shadow:0 0 18px var(--metro-line); }
         }
+        .station-title { font-size:28px; font-weight:700; color:#f0f6fc; }
+        .station-subtitle { font-size:13px; color:var(--text-secondary); margin-top:4px; }
+        .route-info { display:inline-flex; align-items:center; gap:6px; font-size:12px; color:var(--text-muted); margin-top:2px; }
+        .route-arrow { color:var(--metro-line); font-weight:700; }
 
-        .station-title {
-            font-size: 28px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            color: #f0f6fc;
-            margin: 0;
-            line-height: 1.2;
-        }
+        /* tap gesture */
+        .tap-gesture-container { display:flex; justify-content:center; margin:2px 0 8px 0; opacity:0.9; }
+        .tap-gesture { display:inline-flex; align-items:center; gap:6px; font-size:11px; color:var(--metro-line-text); font-weight:500; }
+        .tap-hand { font-size:20px; animation:point-down 1.2s ease-in-out infinite; display:inline-block; }
+        @keyframes point-down { 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(5px); } }
 
-        .station-subtitle {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-top: 4px;
-        }
-
-        .route-info {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-top: 2px;
-        }
-
-        .route-arrow {
-            color: var(--metro-line);
-            font-weight: 700;
-        }
-
-        .tap-gesture-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 2px 0 8px 0;
-            opacity: 0.9;
-        }
-
-        .tap-gesture {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 11px;
-            color: var(--metro-line-text);
-            font-weight: 500;
-        }
-
-        .tap-hand {
-            font-size: 20px;
-            animation: point-down 1.2s ease-in-out infinite;
-            display: inline-block;
-        }
-
-        @keyframes point-down {
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(5px);
-            }
-        }
-
-        .station-strip-container {
-            margin: 0 0 8px 0;
-        }
-
-        .station-strip-label {
-            font-size: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-            font-weight: 600;
-            padding-left: 4px;
-            opacity: 0.8;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .station-strip {
-            display: flex;
-            gap: 6px;
-            overflow-x: auto;
-            scroll-behavior: smooth;
-            padding: 6px 2px 10px 2px;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: thin;
-            scrollbar-color: var(--card-border) transparent;
-        }
-
-        .station-strip::-webkit-scrollbar {
-            height: 4px;
-        }
-        .station-strip::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .station-strip::-webkit-scrollbar-thumb {
-            background: var(--card-border);
-            border-radius: 10px;
-        }
-
+        /* station strip */
+        .station-strip-container { margin:0 0 8px 0; }
+        .station-strip-label { font-size:10px; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted); margin-bottom:8px; font-weight:600; padding-left:4px; opacity:0.8; }
+        .station-strip { display:flex; gap:6px; overflow-x:auto; scroll-behavior:smooth; padding:6px 2px 10px 2px; -webkit-overflow-scrolling:touch; scrollbar-width:thin; scrollbar-color:var(--card-border) transparent; }
+        .station-strip::-webkit-scrollbar { height:4px; }
+        .station-strip::-webkit-scrollbar-track { background:transparent; }
+        .station-strip::-webkit-scrollbar-thumb { background:var(--card-border); border-radius:10px; }
         .station-chip {
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 50px;
-            padding: 6px 12px;
-            font-size: 11px;
-            font-weight: 500;
-            color: var(--text-secondary);
-            white-space: nowrap;
-            transition: var(--transition);
-            cursor: pointer;
-            user-select: none;
+            flex-shrink:0; display:flex; align-items:center; gap:5px; background:var(--card-bg);
+            border:1px solid var(--card-border); border-radius:50px; padding:6px 12px;
+            font-size:11px; font-weight:500; color:var(--text-secondary); white-space:nowrap;
+            transition:var(--transition); cursor:pointer; user-select:none;
         }
-
-        .station-chip:active {
-            transform: scale(0.95);
-        }
-
-        .station-chip.source {
-            background: var(--metro-line-bg);
-            border-color: var(--metro-line-border);
-            color: var(--metro-line-text);
-            font-weight: 700;
-            box-shadow: 0 0 12px var(--selected-glow);
-        }
-
-        .station-chip.destination {
-            background: rgba(240, 136, 62, 0.12);
-            border-color: rgba(240, 136, 62, 0.35);
-            color: var(--accent-peak);
-            font-weight: 700;
-        }
-
-        .station-chip.interchange {
-            border-color: rgba(88, 166, 255, 0.4);
-            color: var(--accent-offpeak);
-            font-weight: 600;
-        }
-
+        .station-chip:active { transform:scale(0.95); }
+        .station-chip.source { background:var(--metro-line-bg); border-color:var(--metro-line-border); color:var(--metro-line-text); font-weight:700; box-shadow:0 0 12px var(--selected-glow); }
+        .station-chip.destination { background:rgba(240,136,62,0.12); border-color:rgba(240,136,62,0.35); color:var(--accent-peak); font-weight:700; }
+        .station-chip.interchange { border-color:rgba(88,166,255,0.4); color:var(--accent-offpeak); font-weight:600; }
         .station-chip.selected-station {
-            border-color: var(--metro-line);
-            box-shadow: 0 0 16px var(--selected-glow);
-            background: var(--metro-line-bg);
-            color: var(--metro-line-text);
-            font-weight: 700;
-            animation: pulse-selected 2s ease-in-out infinite;
+            border-color:var(--metro-line); box-shadow:0 0 16px var(--selected-glow);
+            background:var(--metro-line-bg); color:var(--metro-line-text); font-weight:700;
+            animation:pulse-selected 2s ease-in-out infinite;
         }
+        @keyframes pulse-selected { 0%,100%{ box-shadow:0 0 12px var(--selected-glow); } 50%{ box-shadow:0 0 24px var(--selected-glow); } }
+        .chip-dot { width:5px; height:5px; border-radius:50%; background:currentColor; opacity:0.7; }
+        .chip-connector { color:var(--text-muted); font-size:10px; margin:0 1px; }
+        .selected-indicator { text-align:center; margin:6px 0 14px 0; font-size:11px; color:var(--metro-line-text); font-weight:600; opacity:0.9; }
 
-        @keyframes pulse-selected {
-            0%,
-            100% {
-                box-shadow: 0 0 12px var(--selected-glow);
-            }
-            50% {
-                box-shadow: 0 0 24px var(--selected-glow);
-            }
-        }
-
-        .chip-dot {
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            background: currentColor;
-            opacity: 0.7;
-        }
-
-        .chip-connector {
-            color: var(--text-muted);
-            font-size: 10px;
-            margin: 0 1px;
-        }
-
-        .selected-indicator {
-            text-align: center;
-            margin: 6px 0 14px 0;
-            font-size: 11px;
-            color: var(--metro-line-text);
-            font-weight: 600;
-            opacity: 0.9;
-        }
-
-        .live-clock-row {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-
+        /* live clock */
+        .live-clock-row { display:flex; align-items:center; justify-content:center; gap:10px; margin-top:10px; flex-wrap:wrap; }
         .live-clock {
-            font-size: 15px;
-            font-weight: 600;
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 50px;
-            padding: 8px 16px;
-            letter-spacing: 0.5px;
-            font-variant-numeric: tabular-nums;
-            font-family: 'SF Mono', 'JetBrains Mono', 'Consolas', 'Menlo', monospace;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            font-size:15px; font-weight:600; background:var(--card-bg); border:1px solid var(--card-border);
+            border-radius:50px; padding:8px 16px; letter-spacing:0.5px; font-variant-numeric:tabular-nums;
+            font-family:'SF Mono', 'JetBrains Mono', monospace; display:flex; align-items:center; gap:8px;
         }
+        .live-indicator { width:7px; height:7px; border-radius:50%; background:var(--dot-live); box-shadow:0 0 8px rgba(63,185,80,0.7); animation:pulse-dot 1.5s ease-in-out infinite; }
+        .status-pill { display:inline-flex; align-items:center; gap:7px; font-size:13px; font-weight:600; padding:7px 14px; border-radius:50px; letter-spacing:0.2px; }
+        .status-pill.peak { background:var(--accent-peak-bg); color:var(--accent-peak); border:1px solid rgba(240,136,62,0.25); }
+        .status-pill.offpeak { background:var(--accent-offpeak-bg); color:var(--accent-offpeak); border:1px solid rgba(88,166,255,0.25); }
+        .status-pill.closed { background:rgba(248,81,73,0.12); color:var(--accent-closed); border:1px solid rgba(248,81,73,0.25); }
+        .status-dot { width:6px; height:6px; border-radius:50%; display:inline-block; }
+        .status-pill.peak .status-dot { background:var(--accent-peak); }
+        .status-pill.offpeak .status-dot { background:var(--accent-offpeak); }
+        .status-pill.closed .status-dot { background:var(--accent-closed); }
 
-        .live-indicator {
-            width: 7px;
-            height: 7px;
-            border-radius: 50%;
-            background: var(--dot-live);
-            box-shadow: 0 0 8px rgba(63, 185, 80, 0.7);
-            animation: pulse-dot 1.5s ease-in-out infinite;
-        }
+        /* section labels */
+        .section-label { display:flex; align-items:center; gap:10px; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--text-muted); margin:14px 0 8px 4px; opacity:0.8; }
+        .section-label::after { content:''; flex:1; height:1px; background:var(--card-border); opacity:0.6; }
 
-        .status-pill {
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            font-size: 13px;
-            font-weight: 600;
-            padding: 7px 14px;
-            border-radius: 50px;
-            letter-spacing: 0.2px;
-        }
-
-        .status-pill.peak {
-            background: var(--accent-peak-bg);
-            color: var(--accent-peak);
-            border: 1px solid rgba(240, 136, 62, 0.25);
-        }
-        .status-pill.offpeak {
-            background: var(--accent-offpeak-bg);
-            color: var(--accent-offpeak);
-            border: 1px solid rgba(88, 166, 255, 0.25);
-        }
-        .status-pill.closed {
-            background: rgba(248, 81, 73, 0.12);
-            color: var(--accent-closed);
-            border: 1px solid rgba(248, 81, 73, 0.25);
-        }
-
-        .status-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            display: inline-block;
-        }
-        .status-pill.peak .status-dot { background: var(--accent-peak); }
-        .status-pill.offpeak .status-dot { background: var(--accent-offpeak); }
-        .status-pill.closed .status-dot { background: var(--accent-closed); }
-
-        .section-label {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-muted);
-            margin: 14px 0 8px 4px;
-            opacity: 0.8;
-        }
-        .section-label::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: var(--card-border);
-            opacity: 0.6;
-        }
-
-        .departure-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
+        /* departure cards */
+        .departure-list { display:flex; flex-direction:column; gap:8px; }
         .departure-card {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: var(--radius);
-            padding: 12px 14px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            transition: var(--transition);
-            position: relative;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            cursor: default;
+            background:var(--card-bg); border:1px solid var(--card-border); border-radius:var(--radius);
+            padding:12px 14px; display:flex; align-items:center; gap:12px; transition:var(--transition);
+            position:relative; overflow:hidden; box-shadow:var(--shadow); cursor:default;
         }
-
-        .departure-card.past-departure {
-            opacity: 0.55;
-            background: rgba(22, 27, 34, 0.6);
-            border-color: rgba(48, 54, 61, 0.5);
-            filter: grayscale(0.3);
-        }
-        .departure-card.past-departure:hover { opacity: 0.75; filter: grayscale(0.1); }
-        .departure-card:hover { border-color: #30363d; box-shadow: var(--shadow-lg); transform: translateY(-1px); }
-        .departure-card:active { transform: scale(0.985); transition: 0.1s ease; }
+        .departure-card.past-departure { opacity:0.55; background:rgba(22,27,34,0.6); border-color:rgba(48,54,61,0.5); filter:grayscale(0.3); }
+        .departure-card.past-departure:hover { opacity:0.75; filter:grayscale(0.1); }
+        .departure-card:hover { border-color:#30363d; box-shadow:var(--shadow-lg); transform:translateY(-1px); }
+        .departure-card:active { transform:scale(0.985); transition:0.1s ease; }
 
         .departure-card.now-departing {
-            border-color: rgba(63, 185, 80, 0.5);
-            background: rgba(63, 185, 80, 0.05);
-            box-shadow: 0 0 20px rgba(63, 185, 80, 0.1);
-            opacity: 1;
-            filter: none;
+            border-color:rgba(63,185,80,0.5); background:rgba(63,185,80,0.05);
+            box-shadow:0 0 20px rgba(63,185,80,0.1); opacity:1; filter:none;
         }
         .departure-card.now-departing::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 3px;
-            background: var(--accent-now);
-            border-radius: 0 3px 3px 0;
-            animation: glow-bar 2s ease-in-out infinite;
+            content:''; position:absolute; left:0; top:0; bottom:0; width:3px;
+            background:var(--accent-now); border-radius:0 3px 3px 0; animation:glow-bar 2s ease-in-out infinite;
         }
+        @keyframes glow-bar { 0%,100%{ opacity:0.6; } 50%{ opacity:1; } }
 
-        @keyframes glow-bar {
-            0%, 100% { opacity: 0.6; }
-            50% { opacity: 1; }
-        }
+        .card-accent-line { position:absolute; left:0; top:10px; bottom:10px; width:3px; border-radius:0 3px 3px 0; opacity:0.7; }
+        .card-accent-line.past { background:var(--accent-past); }
+        .card-accent-line.peak { background:var(--accent-peak); }
+        .card-accent-line.offpeak { background:var(--accent-offpeak); }
 
-        .card-accent-line {
-            position: absolute;
-            left: 0;
-            top: 10px;
-            bottom: 10px;
-            width: 3px;
-            border-radius: 0 3px 3px 0;
-            opacity: 0.7;
-        }
-        .card-accent-line.past { background: var(--accent-past); }
-        .card-accent-line.peak { background: var(--accent-peak); }
-        .card-accent-line.offpeak { background: var(--accent-offpeak); }
+        .card-time-block { flex-shrink:0; text-align:center; min-width:55px; }
+        .card-departure-time { font-size:20px; font-weight:700; letter-spacing:-0.5px; line-height:1; font-variant-numeric:tabular-nums; font-family:'SF Mono', 'JetBrains Mono', monospace; color:#f0f6fc; }
+        .past-departure .card-departure-time { color:var(--text-muted); }
+        .card-departure-label { font-size:9px; text-transform:uppercase; letter-spacing:0.5px; color:var(--text-muted); margin-top:2px; font-weight:500; }
 
-        .card-time-block {
-            flex-shrink: 0;
-            text-align: center;
-            min-width: 55px;
-        }
+        .card-info { flex:1; min-width:0; }
+        .card-route { font-size:12px; font-weight:500; color:var(--text-primary); display:flex; align-items:center; gap:5px; flex-wrap:wrap; }
+        .past-departure .card-route { color:var(--text-muted); }
+        .card-route .source-station { color:var(--metro-line-text); font-weight:600; }
+        .card-route .dest-station { color:var(--accent-peak); font-weight:600; }
+        .card-route .selected-station-name { color:#f0f6fc; font-weight:700; text-decoration:underline; text-decoration-color:var(--metro-line); text-underline-offset:2px; }
+        .past-departure .station-name { color:var(--text-muted); }
 
-        .card-departure-time {
-            font-size: 20px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            line-height: 1;
-            font-variant-numeric: tabular-nums;
-            font-family: 'SF Mono', 'JetBrains Mono', 'Consolas', 'Menlo', monospace;
-            color: #f0f6fc;
-        }
-        .past-departure .card-departure-time { color: var(--text-muted); }
+        .card-arrival { font-size:11px; color:var(--text-secondary); margin-top:2px; display:flex; align-items:center; gap:5px; }
+        .card-arrival time { font-weight:600; color:#c9d1d9; font-variant-numeric:tabular-nums; font-family:'SF Mono', 'JetBrains Mono', monospace; }
 
-        .card-departure-label {
-            font-size: 9px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            color: var(--text-muted);
-            margin-top: 2px;
-            font-weight: 500;
-        }
-
-        .card-info { flex: 1; min-width: 0; }
-
-        .card-route {
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--text-primary);
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            flex-wrap: wrap;
-        }
-        .past-departure .card-route { color: var(--text-muted); }
-
-        .card-route .source-station { color: var(--metro-line-text); font-weight: 600; }
-        .card-route .dest-station { color: var(--accent-peak); font-weight: 600; }
-        .card-route .selected-station-name { color: #f0f6fc; font-weight: 700; text-decoration: underline; text-decoration-color: var(--metro-line); text-underline-offset: 2px; }
-        .past-departure .station-name { color: var(--text-muted); }
-
-        .card-arrival {
-            font-size: 11px;
-            color: var(--text-secondary);
-            margin-top: 2px;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-        .card-arrival time {
-            font-weight: 600;
-            color: #c9d1d9;
-            font-variant-numeric: tabular-nums;
-            font-family: 'SF Mono', 'JetBrains Mono', 'Consolas', 'Menlo', monospace;
-        }
-
-        .card-countdown {
-            flex-shrink: 0;
-            text-align: center;
-            min-width: 55px;
-        }
-
-        .countdown-value {
-            font-size: 19px;
-            font-weight: 700;
-            letter-spacing: -0.5px;
-            font-variant-numeric: tabular-nums;
-            font-family: 'SF Mono', 'JetBrains Mono', 'Consolas', 'Menlo', monospace;
-        }
-        .countdown-value.past-time { color: var(--text-muted); font-size: 13px; font-weight: 500; }
-        .countdown-value.now { color: var(--accent-now); animation: pulse-now 2s ease-in-out infinite; }
+        .card-countdown { flex-shrink:0; text-align:center; min-width:55px; }
+        .countdown-value { font-size:19px; font-weight:700; letter-spacing:-0.5px; font-variant-numeric:tabular-nums; font-family:'SF Mono', 'JetBrains Mono', monospace; }
+        .countdown-value.past-time { color:var(--text-muted); font-size:13px; font-weight:500; }
+        .countdown-value.now { color:var(--accent-now); animation:pulse-now 2s ease-in-out infinite; }
         @keyframes pulse-now { 0%,100%{opacity:1;} 50%{opacity:0.5;} }
-        .countdown-value.soon { color: var(--accent-peak); }
-        .countdown-value.normal { color: var(--accent-offpeak); }
-        .countdown-value.far { color: var(--text-secondary); }
+        .countdown-value.soon { color:var(--accent-peak); }
+        .countdown-value.normal { color:var(--accent-offpeak); }
+        .countdown-value.far { color:var(--text-secondary); }
+        .countdown-label { font-size:9px; text-transform:uppercase; letter-spacing:0.4px; color:var(--text-muted); margin-top:1px; font-weight:500; }
 
-        .countdown-label {
-            font-size: 9px;
-            text-transform: uppercase;
-            letter-spacing: 0.4px;
-            color: var(--text-muted);
-            margin-top: 1px;
-        }
-
-        .no-service {
-            text-align: center;
-            padding: 32px 20px;
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-        }
-        .no-service-icon { font-size: 48px; margin-bottom: 12px; }
-        .no-service-title { font-size: 18px; font-weight: 700; color: #f0f6fc; margin-bottom: 4px; }
-        .no-service-sub { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+        /* no-service */
+        .no-service { text-align:center; padding:32px 20px; background:var(--card-bg); border:1px solid var(--card-border); border-radius:var(--radius); box-shadow:var(--shadow); }
+        .no-service-icon { font-size:48px; margin-bottom:12px; }
+        .no-service-title { font-size:18px; font-weight:700; color:#f0f6fc; margin-bottom:4px; }
+        .no-service-sub { font-size:13px; color:var(--text-secondary); line-height:1.5; }
         .no-service-next {
-            margin-top: 14px;
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--accent-offpeak);
-            background: var(--accent-offpeak-bg);
-            display: inline-block;
-            padding: 8px 16px;
-            border-radius: 50px;
-            border: 1px solid rgba(88, 166, 255, 0.2);
+            margin-top:14px; font-size:14px; font-weight:600; color:var(--accent-offpeak);
+            background:var(--accent-offpeak-bg); display:inline-block; padding:8px 16px; border-radius:50px;
+            border:1px solid rgba(88,166,255,0.2);
         }
 
-        .footer-info {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 11px;
-            color: var(--text-muted);
-            opacity: 0.7;
-            line-height: 1.6;
-        }
+        /* footer */
+        .footer-info { text-align:center; margin-top:20px; font-size:11px; color:var(--text-muted); opacity:0.7; line-height:1.6; }
 
-        /* adjustment overlay */
+        /* delay overlay button */
         .adjust-trigger {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            background: #e94560;
-            color: white;
-            border: none;
-            border-radius: 50px;
-            padding: 12px 20px;
-            font-size: 14px;
-            font-weight: 600;
-            letter-spacing: 0.3px;
-            cursor: pointer;
-            box-shadow: 0 4px 12px rgba(233, 69, 96, 0.4);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            position:fixed; bottom:24px; right:24px; background:#e94560; color:#fff; border:none;
+            border-radius:50px; padding:12px 20px; font-size:14px; font-weight:600; letter-spacing:0.3px;
+            cursor:pointer; box-shadow:0 4px 12px rgba(233,69,96,0.4); z-index:1000; display:flex; align-items:center; gap:8px;
         }
-        .adjust-trigger:active { opacity: 0.85; }
+        .adjust-trigger:active { opacity:0.85; }
 
+        /* overlay */
         .overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            visibility: hidden;
-            opacity: 0;
-            transition: opacity 0.25s ease, visibility 0.25s;
+            position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.7);
+            display:flex; justify-content:center; align-items:center; z-index:2000;
+            visibility:hidden; opacity:0; transition:opacity 0.25s ease, visibility 0.25s;
         }
-        .overlay.open {
-            visibility: visible;
-            opacity: 1;
-        }
+        .overlay.open { visibility:visible; opacity:1; }
         .counter-card {
-            background: #16213e;
-            border-radius: 24px;
-            padding: 24px 20px;
-            width: 300px;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.5);
-            text-align: center;
+            background:#16213e; border-radius:24px; padding:24px 20px; width:300px;
+            box-shadow:0 12px 30px rgba(0,0,0,0.5); text-align:center;
         }
-        .counter-card h3 {
-            margin: 0 0 20px;
-            font-size: 16px;
-            color: #ccc;
-        }
-        .steppers-row {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 24px;
-        }
-        .stepper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-        }
-        .stepper-label {
-            font-size: 11px;
-            text-transform: uppercase;
-            color: #aaa;
-        }
+        .counter-card h3 { margin:0 0 20px; font-size:16px; color:#ccc; }
+        .steppers-row { display:flex; justify-content:center; align-items:center; gap:20px; margin-bottom:24px; }
+        .stepper { display:flex; flex-direction:column; align-items:center; gap:6px; }
+        .stepper-label { font-size:11px; text-transform:uppercase; color:#aaa; }
         .stepper-btn {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            border: none;
-            font-size: 22px;
-            font-weight: bold;
-            background: #0f3460;
-            color: #e94560;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            user-select: none;
+            width:44px; height:44px; border-radius:50%; border:none; font-size:22px; font-weight:bold;
+            background:#0f3460; color:#e94560; cursor:pointer; display:flex; align-items:center; justify-content:center;
+            user-select:none;
         }
-        .stepper-btn:active { background: #e94560; color: white; }
-        .stepper-value {
-            font-size: 26px;
-            font-weight: 700;
-            font-variant-numeric: tabular-nums;
-            font-family: 'SF Mono', 'JetBrains Mono', monospace;
-            min-width: 50px;
-        }
-        .separator {
-            font-size: 28px;
-            color: #aaa;
-            margin-top: 20px;
-        }
-        .total-delay {
-            background: #0f3460;
-            border-radius: 12px;
-            padding: 10px;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-        .total-delay strong { color: #e94560; }
+        .stepper-btn:active { background:#e94560; color:#fff; }
+        .stepper-value { font-size:26px; font-weight:700; font-variant-numeric:tabular-nums; font-family:'SF Mono', 'JetBrains Mono', monospace; min-width:50px; }
+        .separator { font-size:28px; color:#aaa; margin-top:20px; }
+        .total-delay { background:#0f3460; border-radius:12px; padding:10px; font-size:14px; margin-bottom:20px; }
+        .total-delay strong { color:#e94560; }
         .close-btn {
-            background: transparent;
-            border: 1px solid #e94560;
-            color: #e94560;
-            padding: 10px 24px;
-            border-radius: 50px;
-            font-weight: 600;
-            cursor: pointer;
-            width: 100%;
-            font-size: 14px;
+            background:transparent; border:1px solid #e94560; color:#e94560; padding:10px 24px;
+            border-radius:50px; font-weight:600; cursor:pointer; width:100%; font-size:14px;
         }
-        .close-btn:active { background: #e94560; color: white; }
-
-        @media (max-width: 380px) {
-            .departure-card { padding: 10px 8px; gap: 6px; }
-            .card-departure-time { font-size: 17px; }
-            .countdown-value { font-size: 16px; }
-        }
+        .close-btn:active { background:#e94560; color:#fff; }
     </style>
 </head>
 <body>
@@ -866,7 +325,7 @@
         <!-- Disclaimer -->
         <div class="disclaimer" id="disclaimerBox">
             <span id="disclaimerText">⚠️ These are estimated times from the timetable, not live GPS tracking.</span>
-            <button class="close-disclaimer"></button>
+            <button class="close-disclaimer" onclick="document.getElementById('disclaimerBox').style.display='none'">✕</button>
         </div>
 
         <!-- Tap gesture -->
@@ -879,20 +338,20 @@
 
         <!-- Station Strip -->
         <div class="station-strip-container">
-            <div class="station-strip-label">
-                <span data-translate="allStops">📍 All Stops</span>
-            </div>
+            <div class="station-strip-label" data-translate="allStops">📍 All Stops</div>
             <div class="station-strip" id="stationStrip"></div>
         </div>
         <div class="selected-indicator" id="selectedIndicator"></div>
 
+        <!-- Departure Cards -->
         <div id="departureList"></div>
         <p class="footer-info" id="footerInfo"></p>
     </div>
 
-    <!-- Adjustment button & overlay -->
+    <!-- Delay adjustment button -->
     <button class="adjust-trigger" id="openAdjustBtn">⏱ <span data-translate="adjustDelay">Adjust Delay</span></button>
 
+    <!-- Delay overlay -->
     <div class="overlay" id="adjustOverlay">
         <div class="counter-card">
             <h3 data-translate="scheduleAdjustment">Schedule Adjustment</h3>
@@ -923,155 +382,78 @@
             // ========== TRANSLATIONS ==========
             const translations = {
                 en: {
-                    purpleLine: '🟣 Purple Line (Line 1)',
-                    aquaLine: '🔵 Aqua Line (Line 2)',
-                    platform1: '🚇 Platform 1 (→)',
-                    platform2: '🚇 Platform 2 (←)',
-                    sourceStation: 'Source Station · Pune Metro',
-                    nonPeak: 'Non-Peak',
-                    peak: 'Peak Hours',
-                    closed: 'Closed',
-                    frequency: 'Frequency: every',
-                    min: 'min',
-                    allStops: '📍 All Stops',
-                    tapHint: 'Tap a station below to see arrival times',
-                    adjustDelay: 'Adjust Delay',
-                    scheduleAdjustment: 'Schedule Adjustment',
-                    currentDelay: 'Current delay:',
-                    done: 'Done',
-                    sec: 'Sec',
-                    disclaimer: '⚠️ These are estimated times from the timetable, not live GPS tracking.',
-                    serviceEnded: 'Service Ended',
-                    serviceEndedSub: 'Metro operates 06:00–23:00 IST.',
-                    nextMetro: 'Next metro in',
-                    at: 'at',
-                    serviceStarts: 'Starts at 06:00',
-                    firstMetro: 'First metro in',
-                    recentlyDeparted: '⏪ Recently Departed',
-                    upcomingDepartures: '⏩ Upcoming Departures',
-                    recentlyArrived: '⏪ Recently Arrived',
-                    upcomingArrivals: '⏩ Upcoming Arrivals',
-                    noMoreTrains: 'No more trains today',
-                    departs: 'Departs',
-                    departed: 'Departed',
-                    arrives: 'Arrives',
-                    arrived: 'Arrived',
-                    fullJourney: 'full journey',
-                    away: 'away',
-                    arriving: 'Arriving',
-                    justNow: 'Just now',
-                    ago: 'ago',
-                    showingDepartures: 'Showing departures from',
-                    showingArrivals: 'Showing arrivals at',
-                    minFrom: 'min from',
-                    destination: 'destination'
+                    purpleLine:'🟣 Purple Line (Line 1)', aquaLine:'🔵 Aqua Line (Line 2)',
+                    platform1:'🚇 Platform 1 (→)', platform2:'🚇 Platform 2 (←)',
+                    sourceStation:'Source Station · Pune Metro', nonPeak:'Non-Peak', peak:'Peak Hours', closed:'Closed',
+                    frequency:'Frequency: every', min:'min', allStops:'📍 All Stops',
+                    tapHint:'Tap a station below to see arrival times', adjustDelay:'Adjust Delay',
+                    scheduleAdjustment:'Schedule Adjustment', currentDelay:'Current delay:', done:'Done', sec:'Sec',
+                    disclaimer:'⚠️ These are estimated times from the timetable, not live GPS tracking.',
+                    serviceEnded:'Service Ended', serviceEndedSub:'Metro operates 06:00–23:00 IST.',
+                    nextMetro:'Next metro in', at:'at', serviceStarts:'Starts at 06:00', firstMetro:'First metro in',
+                    recentlyDeparted:'⏪ Recently Departed', upcomingDepartures:'⏩ Upcoming Departures',
+                    recentlyArrived:'⏪ Recently Arrived', upcomingArrivals:'⏩ Upcoming Arrivals',
+                    noMoreTrains:'No more trains today', departs:'Departs', departed:'Departed',
+                    arrives:'Arrives', arrived:'Arrived', fullJourney:'full journey', away:'away',
+                    arriving:'Arriving', justNow:'Just now', ago:'ago',
+                    showingDepartures:'Showing departures from', showingArrivals:'Showing arrivals at',
+                    minFrom:'min from', destination:'destination'
                 },
                 mr: {
-                    purpleLine: '🟣 जांभळी मार्ग (लाइन 1)',
-                    aquaLine: '🔵 अ‍ॅक्वा मार्ग (लाइन 2)',
-                    platform1: '🚇 फलाट 1 (→)',
-                    platform2: '🚇 फलाट 2 (←)',
-                    sourceStation: 'स्रोत स्थानक · पुणे मेट्रो',
-                    nonPeak: 'नॉन-पीक',
-                    peak: 'पीक अवर्स',
-                    closed: 'बंद',
-                    frequency: 'वारंवारता: दर',
-                    min: 'मि',
-                    allStops: '📍 सर्व थांबे',
-                    tapHint: 'आगमन वेळ पाहण्यासाठी खालील स्थानकावर टॅप करा',
-                    adjustDelay: 'विलंब समायोजित करा',
-                    scheduleAdjustment: 'वेळापत्रक समायोजन',
-                    currentDelay: 'सध्याचा विलंब:',
-                    done: 'पूर्ण',
-                    sec: 'से',
-                    disclaimer: '⚠️ हे वेळापत्रकानुसार अंदाजित वेळा आहेत, थेट GPS ट्रॅकिंग नाही.',
-                    serviceEnded: 'सेवा संपली',
-                    serviceEndedSub: 'मेट्रो 06:00–23:00 IST चालते.',
-                    nextMetro: 'पुढील मेट्रो',
-                    at: 'वाजता',
-                    serviceStarts: '06:00 वाजता सुरू होते',
-                    firstMetro: 'पहिली मेट्रो',
-                    recentlyDeparted: '⏪ नुकतेच सुटले',
-                    upcomingDepartures: '⏩ आगामी सुटका',
-                    recentlyArrived: '⏪ नुकतेच आले',
-                    upcomingArrivals: '⏩ आगामी आगमन',
-                    noMoreTrains: 'आज आणखी मेट्रो नाही',
-                    departs: 'सुटते',
-                    departed: 'सुटली',
-                    arrives: 'येते',
-                    arrived: 'आली',
-                    fullJourney: 'पूर्ण प्रवास',
-                    away: 'दूर',
-                    arriving: 'येत आहे',
-                    justNow: 'नुकतीच',
-                    ago: 'पूर्वी',
-                    showingDepartures: 'येथून सुटणाऱ्या गाड्या',
-                    showingArrivals: 'येथे येणाऱ्या गाड्या',
-                    minFrom: 'मि निघून',
-                    destination: 'शेवटचे स्थानक'
+                    purpleLine:'🟣 जांभळी मार्ग (लाइन 1)', aquaLine:'🔵 अ‍ॅक्वा मार्ग (लाइन 2)',
+                    platform1:'🚇 फलाट 1 (→)', platform2:'🚇 फलाट 2 (←)',
+                    sourceStation:'स्रोत स्थानक · पुणे मेट्रो', nonPeak:'नॉन-पीक', peak:'पीक अवर्स', closed:'बंद',
+                    frequency:'वारंवारता: दर', min:'मि', allStops:'📍 सर्व थांबे',
+                    tapHint:'आगमन वेळ पाहण्यासाठी खालील स्थानकावर टॅप करा',
+                    adjustDelay:'विलंब समायोजित करा', scheduleAdjustment:'वेळापत्रक समायोजन',
+                    currentDelay:'सध्याचा विलंब:', done:'पूर्ण', sec:'से',
+                    disclaimer:'⚠️ हे वेळापत्रकानुसार अंदाजित वेळा आहेत, थेट GPS ट्रॅकिंग नाही.',
+                    serviceEnded:'सेवा संपली', serviceEndedSub:'मेट्रो 06:00–23:00 IST चालते.',
+                    nextMetro:'पुढील मेट्रो', at:'वाजता', serviceStarts:'06:00 वाजता सुरू होते', firstMetro:'पहिली मेट्रो',
+                    recentlyDeparted:'⏪ नुकतेच सुटले', upcomingDepartures:'⏩ आगामी सुटका',
+                    recentlyArrived:'⏪ नुकतेच आले', upcomingArrivals:'⏩ आगामी आगमन',
+                    noMoreTrains:'आज आणखी मेट्रो नाही', departs:'सुटते', departed:'सुटली',
+                    arrives:'येते', arrived:'आली', fullJourney:'पूर्ण प्रवास', away:'दूर',
+                    arriving:'येत आहे', justNow:'नुकतीच', ago:'पूर्वी',
+                    showingDepartures:'येथून सुटणाऱ्या गाड्या', showingArrivals:'येथे येणाऱ्या गाड्या',
+                    minFrom:'मि निघून', destination:'शेवटचे स्थानक'
                 },
                 hi: {
-                    purpleLine: '🟣 पर्पल लाइन (लाइन 1)',
-                    aquaLine: '🔵 एक्वा लाइन (लाइन 2)',
-                    platform1: '🚇 प्लेटफॉर्म 1 (→)',
-                    platform2: '🚇 प्लेटफॉर्म 2 (←)',
-                    sourceStation: 'स्रोत स्टेशन · पुणे मेट्रो',
-                    nonPeak: 'नॉन-पीक',
-                    peak: 'पीक समय',
-                    closed: 'बंद',
-                    frequency: 'आवृत्ति: हर',
-                    min: 'मि',
-                    allStops: '📍 सभी स्टॉप',
-                    tapHint: 'आगमन समय देखने के लिए नीचे स्टेशन पर टैप करें',
-                    adjustDelay: 'देरी समायोजित करें',
-                    scheduleAdjustment: 'समय सारणी समायोजन',
-                    currentDelay: 'वर्तमान देरी:',
-                    done: 'पूर्ण',
-                    sec: 'से',
-                    disclaimer: '⚠️ ये समय सारणी से अनुमानित समय हैं, लाइव GPS ट्रैकिंग नहीं।',
-                    serviceEnded: 'सेवा समाप्त',
-                    serviceEndedSub: 'मेट्रो 06:00–23:00 IST चलती है।',
-                    nextMetro: 'अगली मेट्रो',
-                    at: 'पर',
-                    serviceStarts: '06:00 बजे शुरू',
-                    firstMetro: 'पहली मेट्रो',
-                    recentlyDeparted: '⏪ हाल ही में रवाना',
-                    upcomingDepartures: '⏩ आगामी प्रस्थान',
-                    recentlyArrived: '⏪ हाल ही में आया',
-                    upcomingArrivals: '⏩ आगामी आगमन',
-                    noMoreTrains: 'आज कोई और मेट्रो नहीं',
-                    departs: 'रवाना',
-                    departed: 'रवाना हुई',
-                    arrives: 'आती है',
-                    arrived: 'आई',
-                    fullJourney: 'पूरी यात्रा',
-                    away: 'दूर',
-                    arriving: 'आ रही है',
-                    justNow: 'अभी-अभी',
-                    ago: 'पहले',
-                    showingDepartures: 'यहाँ से प्रस्थान',
-                    showingArrivals: 'यहाँ आगमन',
-                    minFrom: 'मि से',
-                    destination: 'अंतिम स्टेशन'
+                    purpleLine:'🟣 पर्पल लाइन (लाइन 1)', aquaLine:'🔵 एक्वा लाइन (लाइन 2)',
+                    platform1:'🚇 प्लेटफॉर्म 1 (→)', platform2:'🚇 प्लेटफॉर्म 2 (←)',
+                    sourceStation:'स्रोत स्टेशन · पुणे मेट्रो', nonPeak:'नॉन-पीक', peak:'पीक समय', closed:'बंद',
+                    frequency:'आवृत्ति: हर', min:'मि', allStops:'📍 सभी स्टॉप',
+                    tapHint:'आगमन समय देखने के लिए नीचे स्टेशन पर टैप करें',
+                    adjustDelay:'देरी समायोजित करें', scheduleAdjustment:'समय सारणी समायोजन',
+                    currentDelay:'वर्तमान देरी:', done:'पूर्ण', sec:'से',
+                    disclaimer:'⚠️ ये समय सारणी से अनुमानित समय हैं, लाइव GPS ट्रैकिंग नहीं।',
+                    serviceEnded:'सेवा समाप्त', serviceEndedSub:'मेट्रो 06:00–23:00 IST चलती है।',
+                    nextMetro:'अगली मेट्रो', at:'पर', serviceStarts:'06:00 बजे शुरू', firstMetro:'पहली मेट्रो',
+                    recentlyDeparted:'⏪ हाल ही में रवाना', upcomingDepartures:'⏩ आगामी प्रस्थान',
+                    recentlyArrived:'⏪ हाल ही में आया', upcomingArrivals:'⏩ आगामी आगमन',
+                    noMoreTrains:'आज कोई और मेट्रो नहीं', departs:'रवाना', departed:'रवाना हुई',
+                    arrives:'आती है', arrived:'आई', fullJourney:'पूरी यात्रा', away:'दूर',
+                    arriving:'आ रही है', justNow:'अभी-अभी', ago:'पहले',
+                    showingDepartures:'यहाँ से प्रस्थान', showingArrivals:'यहाँ आगमन',
+                    minFrom:'मि से', destination:'अंतिम स्टेशन'
                 }
             };
 
             let currentLang = 'en';
+            const t = (key) => translations[currentLang] && translations[currentLang][key] ? translations[currentLang][key] : key;
 
             function translatePage(lang) {
                 currentLang = lang;
                 document.querySelectorAll('[data-translate]').forEach(el => {
                     const key = el.getAttribute('data-translate');
-                    if (translations[lang] && translations[lang][key]) {
-                        if (key === 'frequency') {
-                            el.innerHTML = translations[lang][key] + ': every <strong id="intervalMinutes">10</strong> ' + translations[lang].min;
-                        } else {
-                            el.textContent = translations[lang][key];
-                        }
+                    if (key === 'frequency') {
+                        el.innerHTML = t(key) + ': every <strong id="intervalMinutes">10</strong> ' + t('min');
+                    } else if (translations[lang] && translations[lang][key]) {
+                        el.textContent = translations[lang][key];
                     }
                 });
-                document.getElementById('disclaimerText').textContent = translations[lang].disclaimer;
-                document.getElementById('lineName').textContent = (currentLine === 'purple' ? translations[lang].purpleLine.split(' ').slice(1).join(' ') : translations[lang].aquaLine.split(' ').slice(1).join(' '));
+                document.getElementById('disclaimerText').textContent = t('disclaimer');
+                document.getElementById('lineName').textContent = currentLine === 'purple' ? 'Purple Line' : 'Aqua Line';
                 updateHeaderAndStrip();
                 updateSelectedIndicator();
                 render();
@@ -1080,37 +462,32 @@
             // ========== LINE DATA ==========
             const LINES = {
                 purple: {
-                    name: 'Purple Line',
+                    name:'Purple Line',
                     forward: {
-                        source: 'PCMC Bhavan',
-                        destination: 'Swargate',
-                        stations: ['PCMC Bhavan','Sant Tukaram Nagar','Bhosari (Nashik Phata)','Kasarwadi','Phugewadi','Dapodi','Bopodi','Khadki','Range Hill','Shivaji Nagar','Civil Court','Budhwar Peth','Mandai','Swargate'],
-                        offsets: [0.0, 2.62, 5.23, 7.85, 10.46, 13.08, 15.69, 18.31, 20.92, 23.54, 26.15, 28.77, 31.38, 34.0],
-                        travelTime: 34.0
+                        source:'PCMC Bhavan', destination:'Swargate',
+                        stations:['PCMC Bhavan','Sant Tukaram Nagar','Bhosari (Nashik Phata)','Kasarwadi','Phugewadi','Dapodi','Bopodi','Khadki','Range Hill','Shivaji Nagar','Civil Court','Budhwar Peth','Mandai','Swargate'],
+                        offsets:[0.0,2.62,5.23,7.85,10.46,13.08,15.69,18.31,20.92,23.54,26.15,28.77,31.38,34.0],
+                        travelTime:34.0
                     },
-                    turnAroundAtDest: 4.0,
-                    turnAroundAtOrigin: 4.0,
-                    cssClass: 'line-purple'
+                    turnAroundAtDest:4.0, turnAroundAtOrigin:4.0,
+                    cssClass:'line-purple'
                 },
                 aqua: {
-                    name: 'Aqua Line',
+                    name:'Aqua Line',
                     forward: {
-                        source: 'Vanaz',
-                        destination: 'Ramwadi',
-                        stations: ['Vanaz','Anand Nagar','Ideal Colony','Nal Stop','Garware College','Deccan Gymkhana','Chhatrapati Sambhaji Udyan','PMC Bhavan','Civil Court','Mangalwar Peth','Pune Railway Station','Ruby Hall Clinic','Bund Garden','Yerawada','Kalyani Nagar','Ramwadi'],
-                        offsets: [0.00, 2.57, 4.57, 6.37, 9.65, 11.80, 13.37, 15.52, 17.82, 20.57, 22.65, 24.60, 26.98, 29.18, 34.32, 37.98],
-                        travelTime: 37.98
+                        source:'Vanaz', destination:'Ramwadi',
+                        stations:['Vanaz','Anand Nagar','Ideal Colony','Nal Stop','Garware College','Deccan Gymkhana','Chhatrapati Sambhaji Udyan','PMC Bhavan','Civil Court','Mangalwar Peth','Pune Railway Station','Ruby Hall Clinic','Bund Garden','Yerawada','Kalyani Nagar','Ramwadi'],
+                        offsets:[0.00,2.57,4.57,6.37,9.65,11.80,13.37,15.52,17.82,20.57,22.65,24.60,26.98,29.18,34.32,37.98],
+                        travelTime:37.98
                     },
                     reverse: {
-                        source: 'Ramwadi',
-                        destination: 'Vanaz',
-                        stations: ['Ramwadi','Kalyani Nagar','Yerawada','Bund Garden','Ruby Hall Clinic','Pune Railway Station','Mangalwar Peth','Civil Court','PMC Bhavan','Chhatrapati Sambhaji Udyan','Deccan Gymkhana','Garware College','Nal Stop','Ideal Colony','Anand Nagar','Vanaz'],
-                        offsets: [0.00, 2.68, 7.60, 9.93, 12.18, 13.93, 16.23, 18.82, 21.27, 23.38, 25.10, 27.28, 29.55, 32.32, 34.48, 37.37],
-                        travelTime: 37.37
+                        source:'Ramwadi', destination:'Vanaz',
+                        stations:['Ramwadi','Kalyani Nagar','Yerawada','Bund Garden','Ruby Hall Clinic','Pune Railway Station','Mangalwar Peth','Civil Court','PMC Bhavan','Chhatrapati Sambhaji Udyan','Deccan Gymkhana','Garware College','Nal Stop','Ideal Colony','Anand Nagar','Vanaz'],
+                        offsets:[0.00,2.68,7.60,9.93,12.18,13.93,16.23,18.82,21.27,23.38,25.10,27.28,29.55,32.32,34.48,37.37],
+                        travelTime:37.37
                     },
-                    turnAroundAtDest: 4.67,
-                    turnAroundAtOrigin: 4.75,
-                    cssClass: ''
+                    turnAroundAtDest:4.67, turnAroundAtOrigin:4.75,
+                    cssClass:''
                 }
             };
 
@@ -1127,30 +504,26 @@
             let selectedStationIndex = 0;
             let gestureHidden = false;
             let scheduleDelayMinutes = 0;
-
             const FIRST_DEPARTURE_MIN = 360;
             const LAST_DEPARTURE_MIN = 1380;
             const PAST_ENTRIES = 2;
             const FUTURE_ENTRIES = 5;
 
+            // ========== DEPARTURES (with peak/non-peak transition fix) ==========
             function generateForwardDepartures() {
                 const d = [];
                 for (let t = 360; t < 480; t += 10) d.push(t);
-                for (let t = 480; t <= 660; t += 6) d.push(t);
+                for (let t = 480; t + 6 <= 660; t += 6) d.push(t);
                 for (let t = 670; t < 960; t += 10) d.push(t);
-                for (let t = 960; t <= 1200; t += 6) d.push(t);
+                for (let t = 960; t + 6 <= 1200; t += 6) d.push(t);
                 for (let t = 1210; t <= 1380; t += 10) d.push(t);
                 return d.map(t => t + scheduleDelayMinutes);
             }
-
             function getForwardDepartures() { return generateForwardDepartures(); }
-
-            function computeReverseDepartures(lineKey) {
-                const line = LINES[lineKey];
-                const lastOffset = line.forward.offsets[line.forward.offsets.length-1];
-                return getForwardDepartures().map(dep => dep + lastOffset + line.turnAroundAtDest);
+            function computeReverseDepartures(lk) {
+                const ln = LINES[lk];
+                return getForwardDepartures().map(d => d + ln.forward.offsets[ln.forward.offsets.length-1] + ln.turnAroundAtDest);
             }
-
             function getEffectiveDepartures() {
                 return isReversed ? computeReverseDepartures(currentLine) : getForwardDepartures();
             }
@@ -1158,347 +531,207 @@
             // ========== HELPERS ==========
             function getCurrentIST() {
                 const now = new Date();
-                const opts = { timeZone: 'Asia/Kolkata', hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' };
-                const parts = new Intl.DateTimeFormat('en-US', opts).formatToParts(now);
-                const gp = t => parts.find(p => p.type === t)?.value || '0';
+                const opts = { timeZone:'Asia/Kolkata', hour12:false, hour:'2-digit', minute:'2-digit', second:'2-digit' };
+                const parts = new Intl.DateTimeFormat('en-US',opts).formatToParts(now);
+                const gp = x => parts.find(p => p.type===x)?.value || '0';
                 return {
-                    hours: parseInt(gp('hour')),
-                    minutes: parseInt(gp('minute')),
-                    seconds: parseInt(gp('second')),
-                    totalMinutes: parseInt(gp('hour')) * 60 + parseInt(gp('minute')) + parseInt(gp('second')) / 60,
+                    hours:parseInt(gp('hour')), minutes:parseInt(gp('minute')), seconds:parseInt(gp('second')),
+                    totalMinutes:parseInt(gp('hour'))*60 + parseInt(gp('minute')) + parseInt(gp('second'))/60
                 };
             }
-
-            function formatHM(tm) {
-                const c = ((tm % 1440) + 1440) % 1440;
-                return String(Math.floor(c / 60)).padStart(2,'0') + ':' + String(Math.floor(c % 60)).padStart(2,'0');
-            }
-            function formatHMS(tm) {
-                const c = ((tm % 1440) + 1440) % 1440;
-                const h = Math.floor(c/60), m = Math.floor(c%60), s = Math.floor((c%1)*60);
-                return String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
-            }
+            function formatHM(tm) { const c=((tm%1440)+1440)%1440; return String(Math.floor(c/60)).padStart(2,'0')+':'+String(Math.floor(c%60)).padStart(2,'0'); }
+            function formatHMS(tm) { const c=((tm%1440)+1440)%1440; return String(Math.floor(c/60)).padStart(2,'0')+':'+String(Math.floor(c%60)).padStart(2,'0')+':'+String(Math.floor((c%1)*60)).padStart(2,'0'); }
 
             function getSegmentInfo(tm) {
-                const segs = [
-                    { start:360, end:480, interval:10, isPeak:false },
-                    { start:480, end:660, interval:6, isPeak:true },
-                    { start:660, end:960, interval:10, isPeak:false },
-                    { start:960, end:1200, interval:6, isPeak:true },
-                    { start:1200, end:1380, interval:10, isPeak:false }
+                const s = [
+                    {s:360,e:480,i:10,p:false},{s:480,e:660,i:6,p:true},
+                    {s:660,e:960,i:10,p:false},{s:960,e:1200,i:6,p:true},{s:1200,e:1380,i:10,p:false}
                 ];
-                for (let s of segs) if (tm>=s.start && tm<s.end) return { interval:s.interval, isPeak:s.isPeak, isOperational:true };
-                return { interval:10, isPeak:false, isOperational:false };
+                for (let x of s) if (tm>=x.s && tm<x.e) return {interval:x.i, isPeak:x.p, isOperational:true};
+                return {interval:10,isPeak:false,isOperational:false};
             }
-
-            function getActiveDirectionData() {
-                return isReversed ? LINES[currentLine].reverse : LINES[currentLine].forward;
-            }
-
+            function getActiveDirectionData() { return isReversed ? LINES[currentLine].reverse : LINES[currentLine].forward; }
             function getOriginStation() { return getActiveDirectionData().source; }
             function getDestinationStation() { return getActiveDirectionData().destination; }
             function getStations() { return getActiveDirectionData().stations; }
             function getOffsets() { return getActiveDirectionData().offsets; }
-            const t = (key) => translations[currentLang][key] || key;
 
             function getCountdown(currentMin, targetMin, isPast) {
                 if (isPast) {
                     const diff = currentMin - targetMin;
-                    if (diff < 1) return { text: t('justNow'), css: 'past-time', sub: t('arrived') };
-                    if (diff < 60) return { text: Math.floor(diff) + 'm ' + t('ago'), css: 'past-time', sub: t('arrived') };
+                    if (diff < 1) return { text:t('justNow'), css:'past-time', sub:t('arrived') };
+                    if (diff < 60) return { text:Math.floor(diff)+'m '+t('ago'), css:'past-time', sub:t('arrived') };
                     const h = Math.floor(diff/60), m = Math.floor(diff%60);
-                    return { text: h + 'h ' + m + 'm ' + t('ago'), css: 'past-time', sub: t('arrived') };
+                    return { text:h+'h '+m+'m '+t('ago'), css:'past-time', sub:t('arrived') };
                 }
                 const diff = targetMin - currentMin;
-                if (diff <= 0.05) return { text: t('justNow'), css: 'now', sub: t('arriving') };
-                if (diff < 1) return { text: '<1 ' + t('min'), css: 'soon', sub: t('away') };
-                if (diff < 5) return { text: Math.ceil(diff) + ' ' + t('min'), css: 'soon', sub: t('away') };
-                if (diff < 15) return { text: Math.ceil(diff) + ' ' + t('min'), css: 'normal', sub: t('away') };
-                if (diff < 60) return { text: Math.round(diff) + ' ' + t('min'), css: 'normal', sub: t('away') };
+                if (diff <= 0.05) return { text:t('justNow'), css:'now', sub:t('arriving') };
+                if (diff < 1) return { text:'<1 '+t('min'), css:'soon', sub:t('away') };
+                if (diff < 5) return { text:Math.ceil(diff)+' '+t('min'), css:'soon', sub:t('away') };
+                if (diff < 15) return { text:Math.ceil(diff)+' '+t('min'), css:'normal', sub:t('away') };
+                if (diff < 60) return { text:Math.round(diff)+' '+t('min'), css:'normal', sub:t('away') };
                 const h = Math.floor(diff/60), m = Math.round(diff%60);
-                return { text: h + 'h ' + (m ? m + t('min') : ''), css: 'far', sub: t('away') };
+                return { text:h+'h '+(m?m+' '+t('min'):''), css:'far', sub:t('away') };
             }
 
+            // ========== UI ==========
             function updateHeaderAndStrip() {
-                const line = LINES[currentLine];
-                const dirData = getActiveDirectionData();
-                document.getElementById('lineName').textContent = currentLine === 'purple' ? 'Purple Line' : 'Aqua Line';
-                document.getElementById('sourceStation').textContent = dirData.source;
+                const dd = getActiveDirectionData();
+                document.getElementById('sourceStation').textContent = dd.source;
                 document.getElementById('sourceSubtitle').textContent = t('sourceStation');
-                document.getElementById('routeInfo').innerHTML = `${dirData.source} <span class="route-arrow">→</span> ${dirData.destination} <span style="opacity:0.6;">· ~${dirData.travelTime.toFixed(1)} min</span>`;
-
+                document.getElementById('routeInfo').innerHTML = `${dd.source} <span class="route-arrow">→</span> ${dd.destination} <span style="opacity:0.6;">· ~${dd.travelTime.toFixed(1)} min</span>`;
                 const strip = document.getElementById('stationStrip');
-                const stations = dirData.stations;
-                let html = '';
-                stations.forEach((s, i) => {
+                const st = dd.stations;
+                let h = '';
+                st.forEach((s,i) => {
                     let cls = '';
                     if (i===0) cls += ' source';
-                    else if (i===stations.length-1) cls += ' destination';
+                    else if (i===st.length-1) cls += ' destination';
                     else if (s==='Civil Court') cls += ' interchange';
                     if (i===selectedStationIndex) cls += ' selected-station';
-                    html += `<span class="station-chip${cls}" data-index="${i}">${s}${s==='Civil Court'?' 🔄':''}</span>`;
-                    if (i<stations.length-1) html += '<span class="chip-connector">→</span>';
+                    h += `<span class="station-chip${cls}" data-idx="${i}">${s}${s==='Civil Court'?' 🔄':''}</span>`;
+                    if (i<st.length-1) h += '<span class="chip-connector">→</span>';
                 });
-                strip.innerHTML = html;
-                strip.querySelectorAll('.station-chip').forEach(chip => {
-                    chip.addEventListener('click', function() {
-                        const idx = parseInt(this.dataset.index);
+                strip.innerHTML = h;
+                strip.querySelectorAll('.station-chip').forEach(c => {
+                    c.addEventListener('click', function() {
+                        const idx = parseInt(this.dataset.idx);
                         if (idx===selectedStationIndex) return;
                         selectedStationIndex = idx;
-                        if (!gestureHidden) {
-                            document.getElementById('tapGesture').style.display = 'none';
-                            gestureHidden = true;
-                        }
-                        updateHeaderAndStrip();
-                        updateSelectedIndicator();
-                        render();
-                        this.scrollIntoView({ behavior:'smooth', block:'nearest', inline:'center' });
+                        if (!gestureHidden) { document.getElementById('tapGesture').style.display='none'; gestureHidden=true; }
+                        updateHeaderAndStrip(); updateSelectedIndicator(); render();
+                        this.scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
                     });
                 });
-
-                document.getElementById('footerInfo').innerHTML = `
-                    <strong>${line.name}:</strong> ${stations.join(' → ')}<br>
-                    <span style="opacity:0.7;">Service: 6:00–23:00 IST · ${stations.length} stops · ${dirData.travelTime.toFixed(1)} min</span>`;
+                document.getElementById('footerInfo').innerHTML = `<strong>${LINES[currentLine].name}:</strong> ${st.join(' → ')}<br><span style="opacity:0.7;">Service: 6:00–23:00 IST · ${st.length} stops · ${dd.travelTime.toFixed(1)} min</span>`;
             }
 
             function updateSelectedIndicator() {
-                const stations = getStations();
-                const station = stations[selectedStationIndex];
-                const origin = getOriginStation();
-                const offset = getOffsets()[selectedStationIndex];
+                const st = getStations(), s = st[selectedStationIndex], o = getOriginStation(), off = getOffsets()[selectedStationIndex];
                 const el = document.getElementById('selectedIndicator');
-                if (selectedStationIndex===0) {
-                    el.innerHTML = `📌 ${t('showingDepartures')} <strong>${station}</strong>`;
-                } else if (selectedStationIndex === stations.length-1) {
-                    el.innerHTML = `📌 ${t('showingArrivals')} <strong>${station}</strong> (${t('destination')}, ${offset.toFixed(2)} ${t('min')} ${t('minFrom')} ${origin})`;
-                } else {
-                    el.innerHTML = `📌 ${t('showingArrivals')} <strong>${station}</strong> (${offset.toFixed(2)} ${t('min')} ${t('minFrom')} ${origin})`;
-                }
+                if (selectedStationIndex===0) el.innerHTML = `📌 ${t('showingDepartures')} <strong>${s}</strong>`;
+                else if (selectedStationIndex===st.length-1) el.innerHTML = `📌 ${t('showingArrivals')} <strong>${s}</strong> (${t('destination')}, ${off.toFixed(2)} ${t('min')} ${t('minFrom')} ${o})`;
+                else el.innerHTML = `📌 ${t('showingArrivals')} <strong>${s}</strong> (${off.toFixed(2)} ${t('min')} ${t('minFrom')} ${o})`;
             }
 
-            function buildCard(departureMin, currentMin, isPast) {
-                const offsets = getOffsets();
-                const stations = getStations();
-                const origin = getOriginStation();
-                const destination = getDestinationStation();
-                const offset = offsets[selectedStationIndex];
-                const arrivalAtStation = departureMin + offset;
-                const departureTimeStr = formatHM(departureMin);
-                const arrivalTimeStr = formatHM(arrivalAtStation);
-                const countdown = getCountdown(currentMin, arrivalAtStation, isPast);
-                const segInfo = getSegmentInfo(departureMin);
-                const isNow = !isPast && countdown.css === 'now';
-                const accentClass = isPast ? 'past' : (segInfo.isPeak ? 'peak' : 'offpeak');
-                const pastClass = isPast ? ' past-departure' : '';
-                const nowClass = isNow ? ' now-departing' : '';
-                const stationName = stations[selectedStationIndex];
-                const isFirstOrLast = selectedStationIndex===0 || selectedStationIndex===stations.length-1;
-
-                let routeHTML;
-                if (isFirstOrLast) {
-                    routeHTML = `<span class="source-station">${origin}</span> <span style="color:var(--metro-line);">→</span> <span class="dest-station">${destination}</span>`;
-                } else {
-                    routeHTML = `<span class="source-station">${origin}</span> <span style="color:var(--metro-line);">→</span> <span class="selected-station-name">${stationName}</span> <span style="color:var(--metro-line);">→</span> <span class="dest-station">${destination}</span>`;
-                }
-
-                let headerLabel, headerTime;
-                if (selectedStationIndex === 0) {
-                    headerLabel = isPast ? t('departed') : t('departs');
-                    headerTime = departureTimeStr;
-                } else if (selectedStationIndex === stations.length-1) {
-                    headerLabel = isPast ? t('arrived') : t('arrives');
-                    headerTime = arrivalTimeStr;
-                } else {
-                    headerLabel = isPast ? t('arrived') : t('arrives');
-                    headerTime = arrivalTimeStr;
-                }
-
-                let secondaryInfoHTML;
-                if (selectedStationIndex === 0) {
-                    secondaryInfoHTML = `<span>${t('arrives')} ${destination}</span> <time>${formatHM(departureMin + offsets[offsets.length-1])}</time>`;
-                } else if (selectedStationIndex === stations.length-1) {
-                    secondaryInfoHTML = `<span>${t('departs')} ${origin}</span> <time>${departureTimeStr}</time> <span style="font-size:10px;color:var(--text-muted);">(${t('fullJourney')})</span>`;
-                } else {
-                    secondaryInfoHTML = `<span>${t('departs')} ${origin}</span> <time>${departureTimeStr}</time> <span style="font-size:10px;color:var(--text-muted);">(+${offset.toFixed(2)} ${t('min')} ride)</span>`;
-                }
-
-                return `
-                    <div class="departure-card${pastClass}${nowClass}">
-                        <span class="card-accent-line ${accentClass}"></span>
-                        <div class="card-time-block">
-                            <div class="card-departure-time">${headerTime}</div>
-                            <div class="card-departure-label">${headerLabel}</div>
-                        </div>
-                        <div class="card-info">
-                            <div class="card-route">${routeHTML}</div>
-                            <div class="card-arrival">${secondaryInfoHTML}</div>
-                        </div>
-                        <div class="card-countdown">
-                            <div class="countdown-value ${countdown.css}">${countdown.text}</div>
-                            <div class="countdown-label">${countdown.sub}</div>
-                        </div>
-                    </div>
-                `;
+            function buildCard(depMin, curMin, isPast) {
+                const offs = getOffsets(), sta = getStations(), orig = getOriginStation(), dest = getDestinationStation();
+                const off = offs[selectedStationIndex], arrAt = depMin + off;
+                const cd = getCountdown(curMin, arrAt, isPast);
+                const seg = getSegmentInfo(depMin);
+                const isNow = !isPast && cd.css==='now';
+                const ac = isPast?'past':(seg.isPeak?'peak':'offpeak');
+                const sn = sta[selectedStationIndex];
+                const isFL = selectedStationIndex===0 || selectedStationIndex===sta.length-1;
+                let route = isFL ? `<span class="source-station">${orig}</span> <span style="color:var(--metro-line);">→</span> <span class="dest-station">${dest}</span>` : `<span class="source-station">${orig}</span> <span style="color:var(--metro-line);">→</span> <span class="selected-station-name">${sn}</span> <span style="color:var(--metro-line);">→</span> <span class="dest-station">${dest}</span>`;
+                let lbl = (selectedStationIndex===0) ? (isPast?t('departed'):t('departs')) : (isPast?t('arrived'):t('arrives'));
+                let htm = (selectedStationIndex===0) ? formatHM(depMin) : formatHM(arrAt);
+                let sec;
+                if (selectedStationIndex===0) sec = `<span>${t('arrives')} ${dest}</span> <time>${formatHM(depMin+offs[offs.length-1])}</time>`;
+                else if (selectedStationIndex===sta.length-1) sec = `<span>${t('departs')} ${orig}</span> <time>${formatHM(depMin)}</time> <span style="font-size:10px;color:var(--text-muted);">(${t('fullJourney')})</span>`;
+                else sec = `<span>${t('departs')} ${orig}</span> <time>${formatHM(depMin)}</time> <span style="font-size:10px;color:var(--text-muted);">(+${off.toFixed(2)} ${t('min')} ride)</span>`;
+                return `<div class="departure-card${isPast?' past-departure':''}${isNow?' now-departing':''}"><span class="card-accent-line ${ac}"></span><div class="card-time-block"><div class="card-departure-time">${htm}</div><div class="card-departure-label">${lbl}</div></div><div class="card-info"><div class="card-route">${route}</div><div class="card-arrival">${sec}</div></div><div class="card-countdown"><div class="countdown-value ${cd.css}">${cd.text}</div><div class="countdown-label">${cd.sub}</div></div></div>`;
             }
 
             function render() {
-                const ist = getCurrentIST();
-                const currentMin = ist.totalMinutes;
-                const stations = getStations();
+                const ist = getCurrentIST(), cur = ist.totalMinutes;
+                document.getElementById('liveClockTime').textContent = formatHMS(cur);
+                const seg = getSegmentInfo(cur), op = cur>=FIRST_DEPARTURE_MIN && cur<=LAST_DEPARTURE_MIN;
+                const sp = document.getElementById('statusPill'), st = document.getElementById('statusText'), ie = document.getElementById('intervalMinutes');
+                sp.classList.remove('peak','offpeak','closed');
+                if (!op) { sp.classList.add('closed'); st.textContent = t('closed'); }
+                else if (seg.isPeak) { sp.classList.add('peak'); st.textContent = t('peak'); }
+                else { sp.classList.add('offpeak'); st.textContent = t('nonPeak'); }
+                ie.textContent = seg.interval;
 
-                document.getElementById('liveClockTime').textContent = formatHMS(currentMin);
-
-                const segInfo = getSegmentInfo(currentMin);
-                const isOperational = currentMin >= FIRST_DEPARTURE_MIN && currentMin <= LAST_DEPARTURE_MIN;
-                const statusPill = document.getElementById('statusPill');
-                const statusText = document.getElementById('statusText');
-                const intervalEl = document.getElementById('intervalMinutes');
-                statusPill.classList.remove('peak', 'offpeak', 'closed');
-                if (!isOperational) {
-                    statusPill.classList.add('closed');
-                    statusText.textContent = t('closed');
-                } else if (segInfo.isPeak) {
-                    statusPill.classList.add('peak');
-                    statusText.textContent = t('peak');
-                } else {
-                    statusPill.classList.add('offpeak');
-                    statusText.textContent = t('nonPeak');
-                }
-                intervalEl.textContent = segInfo.interval;
-
-                const departureListEl = document.getElementById('departureList');
-
-                if (currentMin > LAST_DEPARTURE_MIN || currentMin < FIRST_DEPARTURE_MIN) {
-                    let msg = '';
-                    if (currentMin > LAST_DEPARTURE_MIN) {
-                        const mUntil = (24*60 - currentMin) + FIRST_DEPARTURE_MIN;
-                        const hU = Math.floor(mUntil/60), mU = Math.round(mUntil%60);
-                        msg = `<div class="no-service"><div class="no-service-icon">🌙</div><div class="no-service-title">${t('serviceEnded')}</div><div class="no-service-sub">${t('serviceEndedSub')}</div><div class="no-service-next">${t('nextMetro')} ${hU}h ${mU}m ${t('at')} 06:00</div></div>`;
+                const dl = document.getElementById('departureList');
+                if (cur>LAST_DEPARTURE_MIN || cur<FIRST_DEPARTURE_MIN) {
+                    let msg;
+                    if (cur>LAST_DEPARTURE_MIN) {
+                        const mt = (1440-cur)+FIRST_DEPARTURE_MIN, hh=Math.floor(mt/60), mm=Math.round(mt%60);
+                        msg = `<div class="no-service"><div class="no-service-icon">🌙</div><div class="no-service-title">${t('serviceEnded')}</div><div class="no-service-sub">${t('serviceEndedSub')}</div><div class="no-service-next">${t('nextMetro')} ${hh}h ${mm}m ${t('at')} 06:00</div></div>`;
                     } else {
-                        const mUntil = FIRST_DEPARTURE_MIN - currentMin;
-                        const hU = Math.floor(mUntil/60), mU = Math.round(mUntil%60);
-                        msg = `<div class="no-service"><div class="no-service-icon">🌅</div><div class="no-service-title">${t('serviceStarts')}</div><div class="no-service-sub">${t('firstMetro')} ${hU}h ${mU}m</div></div>`;
+                        const mt = FIRST_DEPARTURE_MIN-cur, hh=Math.floor(mt/60), mm=Math.round(mt%60);
+                        msg = `<div class="no-service"><div class="no-service-icon">🌅</div><div class="no-service-title">${t('serviceStarts')}</div><div class="no-service-sub">${t('firstMetro')} ${hh}h ${mm}m</div></div>`;
                     }
-                    departureListEl.innerHTML = msg;
-                    return;
+                    dl.innerHTML = msg; return;
                 }
 
-                const departures = getEffectiveDepartures();
-                const offset = getOffsets()[selectedStationIndex];
-                const past = [], future = [];
-                for (const dep of departures) {
-                    const arrivalAtStation = dep + offset;
-                    if (arrivalAtStation <= currentMin) past.push(dep);
-                    else future.push(dep);
+                const deps = getEffectiveDepartures(), off = getOffsets()[selectedStationIndex];
+                const past=[], fut=[];
+                for (const d of deps) { if (d+off<=cur) past.push(d); else fut.push(d); }
+                const rp = past.slice(-PAST_ENTRIES), uf = fut.slice(0,FUTURE_ENTRIES);
+                const stx = getStations();
+                let pl = (selectedStationIndex===0)?t('recentlyDeparted'):t('recentlyArrived');
+                let fl = (selectedStationIndex===0)?t('upcomingDepartures'):t('upcomingArrivals');
+                let h = '';
+                if (rp.length) {
+                    h += `<div class="section-label">${pl}</div><div class="departure-list">`;
+                    rp.forEach(d => h += buildCard(d,cur,true));
+                    h += '</div>';
                 }
-                const recentPast = past.slice(-PAST_ENTRIES);
-                const upcomingFuture = future.slice(0, FUTURE_ENTRIES);
-
-                let html = '';
-                let pastLabel, futureLabel;
-                if (selectedStationIndex === 0) {
-                    pastLabel = t('recentlyDeparted');
-                    futureLabel = t('upcomingDepartures');
-                } else if (selectedStationIndex === stations.length-1) {
-                    pastLabel = t('recentlyArrived');
-                    futureLabel = t('upcomingArrivals');
-                } else {
-                    pastLabel = t('recentlyArrived');
-                    futureLabel = t('upcomingArrivals');
-                }
-
-                if (recentPast.length > 0) {
-                    html += `<div class="section-label">${pastLabel}</div><div class="departure-list">`;
-                    recentPast.forEach(d => html += buildCard(d, currentMin, true));
-                    html += '</div>';
-                }
-
-                html += `<div class="section-label">${futureLabel}</div><div class="departure-list">`;
-                if (upcomingFuture.length === 0) {
-                    html += `<div class="no-service" style="margin-top:0;"><div class="no-service-title" style="font-size:16px;">${t('noMoreTrains')}</div></div>`;
-                } else {
-                    upcomingFuture.forEach(d => html += buildCard(d, currentMin, false));
-                }
-                html += '</div>';
-                departureListEl.innerHTML = html;
+                h += `<div class="section-label">${fl}</div><div class="departure-list">`;
+                if (!uf.length) h += `<div class="no-service" style="margin-top:0;"><div class="no-service-title" style="font-size:16px;">${t('noMoreTrains')}</div></div>`;
+                else uf.forEach(d => h += buildCard(d,cur,false));
+                h += '</div>';
+                dl.innerHTML = h;
             }
 
-            function switchLine(lineKey) {
-                if (currentLine === lineKey) return;
-                currentLine = lineKey;
-                isReversed = false;
-                selectedStationIndex = 0;
-                document.getElementById('mainContainer').className = 'container ' + (LINES[lineKey].cssClass || '');
-                document.querySelectorAll('.line-btn').forEach(b => b.classList.toggle('active', b.dataset.line === lineKey));
-                document.querySelectorAll('.dir-btn').forEach(b => b.classList.toggle('active', b.dataset.dir === 'forward'));
+            function switchLine(lk) {
+                if (currentLine===lk) return;
+                currentLine=lk; isReversed=false; selectedStationIndex=0;
+                document.getElementById('mainContainer').className='container '+(LINES[lk].cssClass||'');
+                document.querySelectorAll('.line-btn').forEach(b=>b.classList.toggle('active',b.dataset.line===lk));
+                document.querySelectorAll('.dir-btn').forEach(b=>b.classList.toggle('active',b.dataset.dir==='forward'));
                 translatePage(currentLang);
             }
-
-            function switchDirection(direction) {
-                const newReversed = (direction === 'reverse');
-                if (isReversed === newReversed) return;
-                isReversed = newReversed;
-                selectedStationIndex = 0;
-                document.querySelectorAll('.dir-btn').forEach(b => b.classList.toggle('active', b.dataset.dir === direction));
-                updateHeaderAndStrip();
-                updateSelectedIndicator();
-                render();
+            function switchDirection(dir) {
+                const nr = dir==='reverse';
+                if (isReversed===nr) return;
+                isReversed=nr; selectedStationIndex=0;
+                document.querySelectorAll('.dir-btn').forEach(b=>b.classList.toggle('active',b.dataset.dir===dir));
+                updateHeaderAndStrip(); updateSelectedIndicator(); render();
             }
 
-            // ========== DELAY OVERLAY ==========
-            let delayMinutes = 0, delaySeconds = 0;
-            const minValEl = document.getElementById('minValue');
-            const secValEl = document.getElementById('secValue');
-            const totalEl = document.getElementById('totalDelay');
-            const overlay = document.getElementById('adjustOverlay');
-
-            function updateDelayDisplay() {
-                minValEl.textContent = delayMinutes;
-                secValEl.textContent = String(delaySeconds).padStart(2, '0');
-                totalEl.textContent = `${delayMinutes} ${t('min')} ${delaySeconds} ${t('sec')}`;
+            // ========== DELAY OVERLAY (±20 min) ==========
+            let delMin=0, delSec=0;
+            const mv=document.getElementById('minValue'), sv=document.getElementById('secValue'), tov=document.getElementById('totalDelay'), ovl=document.getElementById('adjustOverlay');
+            function updDel() {
+                mv.textContent=delMin; sv.textContent=String(Math.abs(delSec)).padStart(2,'0');
+                const sign=(delMin<0||(delMin===0&&delSec<0))?'-':'';
+                tov.textContent=`${sign}${Math.abs(delMin)} ${t('min')} ${Math.abs(delSec)} ${t('sec')}`;
             }
+            function totDel() { return delMin+delSec/60; }
+            function appDel() { scheduleDelayMinutes=totDel(); render(); }
 
-            function applyDelay() {
-                scheduleDelayMinutes = delayMinutes + delaySeconds / 60;
-                render();
-            }
-
-            document.getElementById('minUp').addEventListener('click', () => { delayMinutes++; updateDelayDisplay(); });
-            document.getElementById('minDown').addEventListener('click', () => { if (delayMinutes > 0) delayMinutes--; updateDelayDisplay(); });
-            document.getElementById('secUp').addEventListener('click', () => {
-                delaySeconds += 5;
-                if (delaySeconds >= 60) { delayMinutes++; delaySeconds -= 60; }
-                updateDelayDisplay();
+            document.getElementById('minUp').addEventListener('click',()=>{if(delMin<20)delMin++;updDel();});
+            document.getElementById('minDown').addEventListener('click',()=>{if(delMin>-20)delMin--;updDel();});
+            document.getElementById('secUp').addEventListener('click',()=>{
+                const cur=totDel(); if(cur>=20)return;
+                if(delMin>=0){ delSec+=5; if(delSec>=60){if(delMin<20){delMin++;delSec-=60;}else delSec=55;}}
+                else { delSec+=5; if(delSec>=60){delMin++;delSec-=60;if(delMin>0)delMin=0;}} updDel();
             });
-            document.getElementById('secDown').addEventListener('click', () => {
-                delaySeconds -= 5;
-                if (delaySeconds < 0) {
-                    if (delayMinutes > 0) { delayMinutes--; delaySeconds = 55; }
-                    else { delaySeconds = 0; }
-                }
-                updateDelayDisplay();
+            document.getElementById('secDown').addEventListener('click',()=>{
+                const cur=totDel(); if(cur<=-20)return;
+                if(delMin<=0){ delSec-=5; if(delSec<=-60){if(delMin>-20){delMin--;delSec+=60;}else delSec=-55;}}
+                else { delSec-=5; if(delSec<0){delMin--;delSec+=60;if(delMin<0)delMin=0;}} updDel();
             });
+            function clampDel() { let t=totDel(); if(t>20){delMin=20;delSec=0;} else if(t<-20){delMin=-20;delSec=0;} updDel(); }
+            document.getElementById('openAdjustBtn').addEventListener('click',()=>ovl.classList.add('open'));
+            document.getElementById('closeAdjustBtn').addEventListener('click',()=>{clampDel();ovl.classList.remove('open');appDel();});
+            ovl.addEventListener('click',e=>{if(e.target===ovl){clampDel();ovl.classList.remove('open');appDel();}});
 
-            document.getElementById('openAdjustBtn').addEventListener('click', () => overlay.classList.add('open'));
-            document.getElementById('closeAdjustBtn').addEventListener('click', () => { overlay.classList.remove('open'); applyDelay(); });
-            overlay.addEventListener('click', (e) => { if (e.target === overlay) { overlay.classList.remove('open'); applyDelay(); } });
+            // ========== EVENT LISTENERS ==========
+            document.querySelectorAll('.lang-btn').forEach(b=>b.addEventListener('click',()=>{
+                document.querySelectorAll('.lang-btn').forEach(x=>x.classList.remove('active'));
+                b.classList.add('active'); translatePage(b.dataset.lang);
+            }));
+            document.querySelectorAll('.line-btn').forEach(b=>b.addEventListener('click',()=>switchLine(b.dataset.line)));
+            document.querySelectorAll('.dir-btn').forEach(b=>b.addEventListener('click',()=>switchDirection(b.dataset.dir)));
 
-            // ========== LANGUAGE SWITCHER ==========
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    translatePage(btn.dataset.lang);
-                });
-            });
-
-            // ========== LINE & DIRECTION BUTTONS ==========
-            document.querySelectorAll('.line-btn').forEach(b => b.addEventListener('click', () => switchLine(b.dataset.line)));
-            document.querySelectorAll('.dir-btn').forEach(b => b.addEventListener('click', () => switchDirection(b.dataset.dir)));
-
-            // ========== INIT ==========
+            // Init
             translatePage('en');
-            setInterval(render, 1000);
+            setInterval(render,1000);
         })();
     </script>
 </body>
